@@ -1,0 +1,149 @@
+:root {
+  --bg-base: #06090e;
+  --bg-card: #0f1520;
+  --bg-card-soft: #151f2f;
+  --text-main: #e9f0fa;
+  --text-muted: #98acc6;
+  --border: #2a3a52;
+  --brand: #34d399;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 420px;
+  height: 700px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  color: var(--text-main);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background:
+    radial-gradient(circle at 10% 15%, rgba(52, 211, 153, 0.16), transparent 28%),
+    radial-gradient(circle at 84% 16%, rgba(56, 189, 248, 0.14), transparent 24%),
+    linear-gradient(160deg, #05070b 0%, #0b1019 100%);
+}
+
+.popup-shell {
+  padding: 18px;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+.screen {
+  display: none;
+  background: linear-gradient(165deg, rgba(18, 25, 38, 0.98), rgba(10, 14, 23, 0.98));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.screen.active {
+  display: block;
+  animation: reveal 0.35s ease forwards;
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo-chip {
+  width: 66px;
+  height: 66px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 14px;
+  border-radius: 16px;
+  color: #041018;
+  font-size: 30px;
+  background: linear-gradient(145deg, #34d399, #22d3ee);
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.55rem;
+  letter-spacing: 0.02em;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-bottom: 14px;
+}
+
+p {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.45;
+}
+
+.btn-primary,
+.btn-secondary {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-top: 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary {
+  color: #05131a;
+  background: linear-gradient(135deg, #34d399, #4ade80);
+}
+
+.btn-secondary {
+  color: var(--text-main);
+  border-color: var(--border);
+  background: rgba(30, 44, 66, 0.62);
+}
+
+.label {
+  display: inline-block;
+  margin: 2px 0 8px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+textarea {
+  width: 100%;
+  min-height: 160px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(13, 21, 34, 0.95);
+  color: var(--text-main);
+  padding: 10px;
+  resize: vertical;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.file-name {
+  margin-top: 8px;
+  text-align: left;
+  font-size: 0.85rem;
+}

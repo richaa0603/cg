@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consultant Copilot</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup-shell">
+      <section id="welcome-screen" class="screen active">
+        <div class="logo-chip">🔍</div>
+        <h1>Consultant Copilot</h1>
+        <p>Discover reusable knowledge and accelerate delivery.</p>
+        <button id="start-btn" class="btn-primary">Start</button>
+      </section>
+
+      <section id="requirement-screen" class="screen" aria-hidden="true">
+        <h2>Project Requirement Intake</h2>
+
+        <label for="requirement-input" class="label">Project Requirements</label>
+        <textarea
+          id="requirement-input"
+          placeholder="Describe scope, technology, constraints, timeline, and expected outcomes."
+        ></textarea>
+
+        <input
+          id="document-input"
+          type="file"
+          accept=".pdf,.docx,.txt,.doc"
+          hidden
+        />
+
+        <div class="button-row">
+          <button id="upload-brd" class="btn-secondary">Upload BRD</button>
+          <button id="upload-doc" class="btn-secondary">Upload PDF</button>
+        </div>
+
+        <p id="file-name" class="file-name">No file selected</p>
+
+        <button id="analyze-btn" class="btn-primary">Analyze</button>
+      </section>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

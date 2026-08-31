@@ -1,0 +1,137 @@
+[
+  {
+    "repository": "ArthCGI/JETKINGS-BACKEND",
+    "description": "",
+    "language": "C#",
+    "stars": 0,
+    "html_url": "https://github.com/ArthCGI/JETKINGS-BACKEND",
+    "topics": [],
+    "readme": "\r\n﻿# JETKINGS-BACKEND\r\n# JetKings API Documentation\r\n\r\n## Base URL\r\n\r\n```http\r\n/api\r\n```\r\n  \r\n---\r\n \r\n# Buyer Product Prices\r\n\r\n## Get All Buyer Product Prices\r\n \r\n```http\r\nGET /api/BuyerProductPrices?page=1&pageSize=10\r\n```\r\n \r\n### Query Parameters\r\n\r\n- page (optional, default: 1)\r\n- pageSize (optional, default: 10)\r\n\r\n---\r\n\r\n## Get Buyer Product Price By Id\r\n\r\n```http\r\nGET /api/BuyerProductPrices/{id}\r\n```\r\n\r\nExample:\r\n\r\n```http\r\nGET /api/BuyerProductPrices/1\r\n```\r\n\r\n---\r\n\r\n## Create Buyer Product Price\r\n\r\n```http\r\nPOST /api/BuyerProductPrices\r\n```\r\n\r\nSample Request:\r\n\r\n```json\r\n{\r\n  \"buyerId\": 1,\r\n  \"productId\": 5,\r\n  \"price\": 850\r\n}\r\n```\r\n\r\n---\r\n\r\n## Update Buyer Product Price\r\n\r\n```http\r\nPUT /api/BuyerProductPrices/{id}\r\n```\r\n\r\nExample:\r\n\r\n```http\r\nPUT /api/BuyerProductPrices/1\r\n```\r\n\r\n---\r\n\r\n## Delete Buyer Product Price\r\n\r\n```http\r\nDELETE /api/BuyerProductPrices/{id}\r\n```\r\n\r\n---\r\n\r\n# Buyers\r\n\r\n## Get All Buyers\r\n\r\n```http\r\nGET /api/Buyers?page=1&pageSize=10\r\n```\r\n\r\n### Query Parameters\r\n\r\n- page (optional, default: 1)\r\n- pageSize (optional, default: 10)\r\n\r\n---\r\n\r\n## Get Buyer By Id\r\n\r\n```http\r\nGET /api/Buyers/{id}\r\n```\r\n\r\nExample:\r\n\r\n```http\r\nGET /api/Buyers/1\r\n```\r\n\r\n---\r\n\r\n## Create Buyer\r\n\r\n```http\r\nPOST /api/Buyers\r\n```\r\n\r\nSample Request:\r\n\r\n```json\r\n{\r\n  \"buyerName\": \"ABC Traders\",\r\n  \"contactPerson\": \"John\",\r\n  \"phone\": \"9999999999\"\r\n}\r\n```\r\n\r\n---\r\n\r\n## Update Buyer\r\n\r\n```http\r\nPUT /api/Buyers/{id}\r\n```\r\n\r\n---\r\n\r\n## Delete Buyer\r\n\r\n```http\r\nDELETE /api/Buyers/{id}\r\n```\r\n\r\n---\r\n\r\n# Dashboard\r\n\r\n## Dashboard Summary\r\n\r\n```http\r\nGET /api/Dashboard/summary\r\n```\r\n\r\nDescription:\r\nReturns overall dashboard metrics and summary information.\r\n\r\n---\r\n\r\n## Recent Activities\r\n\r\n```http\r\nGET /api/Dashboard/recent-activities\r\n```\r\n\r\nDescription:\r\nReturns recent system/business activities.\r\n\r\n---\r\n\r\n## Buyers Summary\r\n\r\n```http\r\nGET /api/Dashboard/buyers-summary\r\n```\r\n\r\nDescription:\r\nReturns buyer-related dashboard statistics.\r\n\r\n---\r\n\r\n# Generate Bill\r\n\r\n## Get Buyers (Dropdown)\r\n\r\n```http\r\nGET /api/GenerateBill/buyers\r\n```\r\n\r\nDescription:\r\nReturns all buyers for the buyer selection dropdown.\r\n\r\n---\r\n\r\n## Get Categories\r\n\r\n```http\r\nGET /api/GenerateBill/categories\r\n```\r\n\r\nDescription:\r\nReturns all product categories.\r\n\r\nSample Response:\r\n\r\n```json\r\n[\r\n  {\r\n    \"id\": 1,\r\n    \"name\": \"Mixers\"\r\n  },\r\n  {\r\n    \"id\": 2,\r\n    \"name\": \"Showers\"\r\n  }\r\n]\r\n```\r\n\r\n---\r\n\r\n## Get Products For Buyer\r\n\r\n```http\r\nGET /api/GenerateBill/products?buyerId=1\r\n```\r\n\r\nDescription:\r\nReturns all products available for the selected buyer including buyer-specific pricing.\r\n\r\nRequired Query Parameter:\r\n\r\n- buyerId\r\n\r\nExample:\r\n\r\n```http\r\nGET /api/GenerateBill/products?buyerId=1\r\n```\r\n\r\n---\r\n\r\n## Get Products For Buyer By Category\r\n\r\n```http\r\nGET /api/GenerateBill/products?buyerId=1&categoryId=2\r\n```\r\n\r\nDescription:\r\nReturns products filtered by category and buyer-specific pricing.\r\n\r\nRequired Query Parameters:\r\n\r\n- buyerId\r\n\r\nOptional Query Parameters:\r\n\r\n- categoryId\r\n\r\nExample:\r\n\r\n```http\r\nGET /api/GenerateBill/products?buyerId=1&categoryId=2\r\n```\r\n\r\n---\r\n\r\n# Products\r\n\r\n## Get All Products\r\n\r\n```http\r\nGET /api/Products?page=1&pageSize=10\r\n```\r\n\r\n### Query Parameters\r\n\r\n- page (optional, default: 1)\r\n- pageSize (optional, default: 10)\r\n\r\n---\r\n\r\n## Get Product By Id\r\n\r\n```http\r\nGET /api/Products/{id}\r\n```\r\n\r\nExample:\r\n\r\n```http\r\nGET /api/Products/5\r\n```\r\n\r\n---\r\n\r\n## Create Product\r\n\r\n```http\r\nPOST /api/Products\r\n```\r\n\r\nSample Request:\r\n\r\n```json\r\n{\r\n  \"categoryId\": 2,\r\n  \"modelName\": \"Rain Shower 8 Inch\",\r\n  \"defaultPrice\": 1200\r\n}\r\n```\r\n\r\n---\r\n\r\n## Update Product\r\n\r\n```http\r\nPUT /api/Products/{id}\r\n```\r\n\r\nExample:\r\n\r\n```http\r\nPUT /api/Products/5\r\n```\r\n\r\n---\r\n\r\n## Delete Product\r\n\r\n```http\r\nDELETE /api/Products/{id}\r\n```\r\n\r\nExample:\r\n\r\n```http\r\nDELETE /api/Products/5\r\n```\r\n\r\n---\r\n\r\n## Get Products By Category\r\n\r\n```http\r\nGET /api/Products/category/{categoryId}\r\n```\r\n\r\nExample:\r\n\r\n```http\r\nGET /api/Products/category/2\r\n```\r\n\r\nSample Response:\r\n\r\n```json\r\n{\r\n  \"success\": true,\r\n  \"data\": [\r\n    {\r\n      \"id\": 5,\r\n      \"categoryId\": 2,\r\n      \"modelName\": \"Rain Shower 6 Inch\",\r\n      \"defaultPrice\": 900\r\n    },\r\n    {\r\n      \"id\": 6,\r\n      \"categoryId\": 2,\r\n      \"modelName\": \"Rain Shower 8 Inch\",\r\n      \"defaultPrice\": 1200\r\n    },\r\n    {\r\n      \"id\": 7,\r\n      \"categoryId\": 2,\r\n      \"modelName\": \"Hand Shower\",\r\n      \"defaultPrice\": 750\r\n    }\r\n  ]\r\n}\r\n```\r\n\r\n---\r\n\r\n# API Summary\r\n\r\n```text\r\nGET     /api/BuyerProductPrices\r\nGET     /api/BuyerProductPrices/{id}\r\nPOST    /api/BuyerProductPrices\r\nPUT     /api/BuyerProductPrices/{id}\r\nDELETE  /api/BuyerProductPrices/{id}\r\n\r\nGET     /api/Buyers\r\nGET     /api/Buyers/{id}\r\nPOST    /api/Buyers\r\nPUT     /api/Buyers/{id}\r\nDELETE  /api/Buyers/{id}\r\n\r\nGET     /api/Dashboard/summary\r\nGET     /api/Dashboard/recent-activities\r\nGET     /api/Dashboard/buyers-summary\r\n\r\nGET     /api/GenerateBill/buyers\r\nGET     /api/GenerateBill/categories\r\nGET     /api/GenerateBill/products?buyerId={buyerId}\r\nGET     /api/GenerateBill/products?buyerId={buyerId}&categoryId={categoryId}\r\n\r\nGET     /api/Products\r\nGET     /api/Products/{id}\r\nPOST    /api/Products\r\nPUT     /api/Products/{id}\r\nDELETE  /api/Products/{id}\r\nGET     /api/Products/category/{categoryId}\r\n```\r\n\r\n"
+  },
+  {
+    "repository": "KaranBishtCG/JetKings-Frontend",
+    "description": "",
+    "language": "JavaScript",
+    "stars": 0,
+    "html_url": "https://github.com/KaranBishtCG/JetKings-Frontend",
+    "topics": [],
+    "readme": "# React + Vite\n\nThis template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.\n\nCurrently, two official plugins are available:\n\n- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)\n- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)\n\n## React Compiler\n\nThe React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).\n\n## Expanding the ESLint configuration\n\nIf you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.\n"
+  },
+  {
+    "repository": "richaa0603/.net-class-assignment",
+    "description": "",
+    "language": "C#",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/.net-class-assignment",
+    "topics": [],
+    "readme": "<img width=\"1867\" height=\"887\" alt=\"image\" src=\"https://github.com/user-attachments/assets/6f7e19da-65b7-4372-ae44-3a52060754aa\" />\n<img width=\"1886\" height=\"889\" alt=\"image\" src=\"https://github.com/user-attachments/assets/0a1b5148-c95c-490b-bbd3-262ec09c4404\" />\n"
+  },
+  {
+    "repository": "richaa0603/Catalog.Api",
+    "description": "",
+    "language": "C#",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/Catalog.Api",
+    "topics": [],
+    "readme": "# Catalog.Api\n\nA RESTful Product Catalog API built with **ASP.NET Core 9** as a .NET assignment project.\n\n---\n\n## Project Overview\n\nCatalog.Api exposes a full CRUD interface for managing products. It uses an in-memory repository backed by a thread-safe `ConcurrentDictionary`, wired up through the standard ASP.NET Core Dependency Injection container. Configuration is handled via the Options Pattern and the API is documented with Swagger/OpenAPI.\n\n---\n\n## Technologies\n\n| Technology | Purpose |\n|---|---|\n| ASP.NET Core 9 | Web framework |\n| Swashbuckle / Swagger | API documentation |\n| xUnit | Unit testing |\n| .NET Options Pattern | Typed configuration |\n| Docker | Containerisation |\n| Render | Cloud deployment |\n\n---\n\n## Architecture\n\n```\nCatalog.Api/\n├── Controllers/          # HTTP layer — ProductsController\n├── DTOs/                 # Input models — CreateProductDto\n├── Models/               # Domain types — Product (record)\n├── Options/              # Typed config — CatalogOptions\n├── Repositories/         # Data layer — IProductRepository / InMemoryProductRepository\n├── Catalog.Api.Tests/    # xUnit test project\n├── Program.cs            # DI registration and middleware pipeline\n├── Dockerfile            # Multi-stage Docker build\n└── render.yaml           # Render.com deployment manifest\n```\n\n### Repository Pattern\n\n`IProductRepository` defines the data contract. `InMemoryProductRepository` implements it using a `ConcurrentDictionary<int, Product>` for thread-safe concurrent access with `Interlocked.Increment` for ID generation. Swapping to a real database requires only a new implementation — no controller changes.\n\n### Dependency Injection\n\n`IProductRepository` is registered as a singleton in `Program.cs`:\n\n```csharp\nbuilder.Services.AddSingleton<IProductRepository, InMemoryProductRepository>();\n```\n\n### Options Pattern\n\n`CatalogOptions` is bound from `appsettings.json` and injected into `ProductsController` via `IOptions<CatalogOptions>`:\n\n```json\n\"CatalogOptions\": {\n  \"DefaultPageSize\": 20\n}\n```\n\n---\n\n## API Endpoints\n\n| Method | Route | Description | Success | Error |\n|---|---|---|---|---|\n| `GET` | `/api/products` | List all products (paged) | 200 | — |\n| `GET` | `/api/products/{id}` | Get product by ID | 200 | 404 |\n| `POST` | `/api/products` | Create a product | 201 | 400 |\n| `PUT` | `/api/products/{id}` | Update a product | 204 | 400, 404 |\n| `DELETE` | `/api/products/{id}` | Delete a product | 204 | 404 |\n| `GET` | `/api/products/health` | Health check | 200 | — |\n\n### Sample POST body\n\n```json\n{\n  \"name\": \"Widget Pro\",\n  \"price\": 29.99,\n  \"category\": \"Widgets\"\n}\n```\n\n---\n\n## Run Locally\n\n```bash\ncd Catalog.Api\ndotnet run\n```\n\nSwagger UI: http://localhost:5143/swagger\n\n---\n\n## Run Tests\n\n```bash\n# From the solution root\ndotnet test Catalog.sln --verbosity normal\n\n# Or directly from the test project\ncd Catalog.Api.Tests\ndotnet test\n```\n\n### Test Coverage\n\n| Test | Description |\n|---|---|\n| `GetByIdAsync_ReturnsNull_WhenProductDoesNotExist` | 404 path — missing product returns null |\n| `GetByIdAsync_ReturnsProduct_WhenProductExists` | Happy path get by ID |\n| `GetAllAsync_ReturnsEmpty_WhenRepositoryIsNew` | Fresh repo is empty |\n| `GetAllAsync_ReturnsAllCreatedProducts` | Correct count after inserts |\n| `CreateAsync_AssignsAutoIncrementedId` | IDs start at 1, increment correctly |\n| `UpdateAsync_ReturnsFalse_WhenProductDoesNotExist` | Update returns false for ghost ID |\n| `UpdateAsync_ReturnsTrue_AndPersistsChanges_WhenProductExists` | Update persists correctly |\n| `DeleteAsync_ReturnsFalse_WhenProductDoesNotExist` | Delete returns false for missing ID |\n| `DeleteAsync_ReturnsTrue_AndRemovesProduct_WhenProductExists` | Delete removes the record |\n\n---\n\n## Docker\n\n```bash\ndocker build -t catalog-api .\ndocker run -p 8080:8080 catalog-api\n```\n\nSwagger UI: http://localhost:8080/swagger\n\n---\n\n## Deploy to Render\n\n1. Push this repository to GitHub.\n2. In [Render Dashboard](https://dashboard.render.com), click **New → Web Service**.\n3. Connect your GitHub repository.\n4. Render auto-detects `render.yaml` and configures the service.\n5. Click **Deploy**. Render builds the Docker image and starts the service.\n6. Swagger is available at `https://<your-app>.onrender.com/swagger`.\n\n> The app reads Render's `PORT` environment variable automatically so no manual port configuration is required.\n\n---\n\n## Submission Summary\n\n### Assignment Requirements — Completion Status\n\n| Requirement | Status |\n|---|---|\n| `Product` record (Id, Name, Price, Category) | ✅ |\n| `CreateProductDto` with validation | ✅ |\n| `IProductRepository` interface | ✅ |\n| `InMemoryProductRepository` (thread-safe) | ✅ |\n| Async CRUD methods | ✅ |\n| `ProductsController` | ✅ |\n| Correct status codes (200, 201, 204, 400, 404) | ✅ |\n| Dependency Injection | ✅ |\n| `DefaultPageSize` Options Pattern | ✅ |\n| Health endpoint | ✅ |\n| xUnit unit tests (9 tests, all passing) | ✅ |\n| Swagger / OpenAPI documentation | ✅ |\n| GitHub Copilot used throughout | ✅ |\n| Docker + Render deployment | ✅ |\n\n### Key Design Decisions\n\n- **Repository Pattern** abstracts storage from the HTTP layer, making it trivially replaceable.\n- **ConcurrentDictionary + Interlocked.Increment** ensures the singleton repository is safe under concurrent requests.\n- **Data annotations on DTO** (`[Required]`, `[MaxLength]`, `[Range]`) leverage `[ApiController]`'s automatic model validation for clean 400 responses without manual `ModelState` checks.\n- **`public partial class Program`** makes the entry point visible to future integration tests using `WebApplicationFactory<Program>`.\n"
+  },
+  {
+    "repository": "richaa0603/cg",
+    "description": "",
+    "language": "Unknown",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/cg",
+    "topics": [],
+    "readme": ""
+  },
+  {
+    "repository": "richaa0603/CG-Portfolio",
+    "description": "",
+    "language": "HTML",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/CG-Portfolio",
+    "topics": [],
+    "readme": ""
+  },
+  {
+    "repository": "richaa0603/cloud-assignment",
+    "description": "",
+    "language": "Python",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/cloud-assignment",
+    "topics": [],
+    "readme": ""
+  },
+  {
+    "repository": "richaa0603/khata",
+    "description": "",
+    "language": "C#",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/khata",
+    "topics": [],
+    "readme": ""
+  },
+  {
+    "repository": "richaa0603/portfolio",
+    "description": "",
+    "language": "JavaScript",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/portfolio",
+    "topics": [],
+    "readme": "# React + Vite\n\nThis template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.\n\nCurrently, two official plugins are available:\n\n- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)\n- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)\n\n## React Compiler\n\nThe React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).\n\n## Expanding the Oxlint configuration\n\nIf you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.\n"
+  },
+  {
+    "repository": "richaa0603/ProductManagementAPI",
+    "description": "",
+    "language": "C#",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/ProductManagementAPI",
+    "topics": [],
+    "readme": "# Product Management API\n\nA RESTful API for managing product inventory, built with **ASP.NET Core Web API (.NET 9)**, **Entity Framework Core**, and **SQL Server**. Exposes full CRUD operations and category-based search with automatic OpenAPI documentation via Swagger.\n\n[![.NET](https://img.shields.io/badge/.NET-9.0-512BD4)](https://dotnet.microsoft.com)\n[![EF Core](https://img.shields.io/badge/EF%20Core-9.0-512BD4)](https://learn.microsoft.com/ef/core)\n[![SQL Server](https://img.shields.io/badge/SQL%20Server-2019%2B-CC2927)](https://www.microsoft.com/sql-server)\n[![Swagger](https://img.shields.io/badge/Swagger-OpenAPI%20v3-85EA2D)](https://swagger.io)\n\n---\n\n## Table of Contents\n\n- [Features](#features)\n- [Tech Stack](#tech-stack)\n- [Project Structure](#project-structure)\n- [API Endpoints](#api-endpoints)\n- [Product Model](#product-model)\n- [Prerequisites](#prerequisites)\n- [Setup](#setup)\n- [Running the API](#running-the-api)\n- [Swagger UI](#swagger-ui)\n- [Hosting](#hosting)\n\n---\n\n## Features\n\n- Full CRUD for products: create, read, update, and delete\n- Category-based product search\n- Model validation via Data Annotations (`[Required]`, `[Range]`, `[MaxLength]`)\n- Async/await throughout using `Task`-based methods and `CancellationToken` support\n- Entity Framework Core with SQL Server — code-first migrations\n- Scoped dependency injection (`IProductService` / `ProductService`)\n- Structured logging with `ILogger<ProductService>` (product created, updated, deleted)\n- OpenAPI documentation with XML comment integration\n- HTTPS redirection\n\n---\n\n## Tech Stack\n\n| Layer | Technology |\n|---|---|\n| Framework | ASP.NET Core Web API (.NET 9) |\n| ORM | Entity Framework Core 9.0 |\n| Database | SQL Server |\n| Documentation | Swashbuckle / OpenAPI 3 |\n| Logging | ASP.NET Core built-in `ILogger` |\n\n---\n\n## Project Structure\n\n```\nProductManagementAPI/\n├── Controllers/\n│   └── ProductsController.cs   # API endpoints\n├── Data/\n│   └── AppDbContext.cs          # EF Core DbContext\n├── Models/\n│   └── Product.cs               # Product entity with validation attributes\n├── Services/\n│   ├── IProductService.cs       # Service interface\n│   └── ProductService.cs        # EF Core service implementation\n├── Properties/\n│   └── launchSettings.json\n├── appsettings.json             # Connection string & logging config\n├── Program.cs                   # App bootstrap, DI, middleware pipeline\n└── ProductManagementAPI.csproj\n```\n\n---\n\n## API Endpoints\n\nBase URL: `https://localhost:7155/api/products`\n\n| Method | Endpoint | Description | Success | Error |\n|---|---|---|---|---|\n| `GET` | `/api/products` | Retrieve all products | `200 OK` | — |\n| `GET` | `/api/products/{id}` | Retrieve product by ID | `200 OK` | `404 Not Found` |\n| `POST` | `/api/products` | Create a new product | `201 Created` | `400 Bad Request` |\n| `PUT` | `/api/products/{id}` | Update an existing product | `200 OK` | `400 Bad Request`, `404 Not Found` |\n| `DELETE` | `/api/products/{id}` | Delete a product | `204 No Content` | `404 Not Found` |\n| `GET` | `/api/products/search?category={value}` | Search products by category | `200 OK` | `400 Bad Request` |\n\n### Example: Create a Product\n\n**Request**\n```http\nPOST /api/products\nContent-Type: application/json\n\n{\n  \"name\": \"Wireless Keyboard\",\n  \"category\": \"Electronics\",\n  \"price\": 49.99,\n  \"stock\": 120\n}\n```\n\n**Response** `201 Created`\n```json\n{\n  \"id\": 1,\n  \"name\": \"Wireless Keyboard\",\n  \"category\": \"Electronics\",\n  \"price\": 49.99,\n  \"stock\": 120,\n  \"createdDate\": \"2026-07-04T10:00:00Z\",\n  \"updatedDate\": null\n}\n```\n\n---\n\n## Product Model\n\n| Field | Type | Validation |\n|---|---|---|\n| `id` | `int` | Auto-generated primary key |\n| `name` | `string` | Required, max 200 characters |\n| `category` | `string` | Required, max 100 characters |\n| `price` | `decimal` | Must be greater than `0.00` |\n| `stock` | `int` | Must be greater than or equal to `0` |\n| `createdDate` | `DateTime` | Auto-set to UTC on creation |\n| `updatedDate` | `DateTime?` | Nullable; set on each update |\n\n---\n\n## Prerequisites\n\n- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)\n- [SQL Server](https://www.microsoft.com/sql-server) (2019 or later) or [SQL Server Express](https://www.microsoft.com/sql-server/sql-server-downloads)\n- [EF Core CLI tools](https://learn.microsoft.com/ef/core/cli/dotnet)\n\nInstall the EF Core CLI tools if not already installed:\n\n```bash\ndotnet tool install --global dotnet-ef\n```\n\n---\n\n## Setup\n\n**1. Clone the repository**\n\n```bash\ngit clone https://github.com/<your-username>/ProductManagementAPI.git\ncd ProductManagementAPI\n```\n\n**2. Configure the connection string**\n\nOpen `appsettings.json` and update `DefaultConnection` to point to your SQL Server instance:\n\n```json\n{\n  \"ConnectionStrings\": {\n    \"DefaultConnection\": \"Server=localhost;Database=ProductDb;Trusted_Connection=True;TrustServerCertificate=True;\"\n  }\n}\n```\n\n**3. Restore dependencies**\n\n```bash\ndotnet restore\n```\n\n**4. Apply database migrations**\n\n```bash\ndotnet ef migrations add InitialCreate\ndotnet ef database update\n```\n\n---\n\n## Running the API\n\n```bash\ndotnet run\n```\n\nThe API will be available at:\n\n| Scheme | URL |\n|---|---|\n| HTTPS | `https://localhost:7155` |\n| HTTP | `http://localhost:5270` |\n\n---\n\n## Swagger UI\n\nInteractive API documentation is available in the **Development** environment at:\n\n```\nhttps://localhost:7155/swagger\n```\n\nThe Swagger UI lists all endpoints, accepted request bodies, response schemas, and HTTP status codes derived from XML documentation comments in the source.\n\n---\n\n## Hosting\n\nTo deploy to a live environment, replace the placeholder below with your hosting URL:\n\n```\nhttps://<your-hosting-url>/api/products\n```\n\n**GitHub Repository**\n\n```\nhttps://github.com/<your-username>/ProductManagementAPI\n```\n"
+  },
+  {
+    "repository": "richaa0603/react-practice",
+    "description": "",
+    "language": "CSS",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/react-practice",
+    "topics": [],
+    "readme": ""
+  },
+  {
+    "repository": "richaa0603/salesforce-api-integration-assignment",
+    "description": "",
+    "language": "Unknown",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/salesforce-api-integration-assignment",
+    "topics": [],
+    "readme": "<img width=\"1898\" height=\"1004\" alt=\"image\" src=\"https://github.com/user-attachments/assets/a0142288-73d4-49e1-9db3-2233f7027540\" />\r\n\r\n<img width=\"1919\" height=\"962\" alt=\"image\" src=\"https://github.com/user-attachments/assets/5fc8cd31-9e64-4762-a918-3ebbd1451c88\" />\r\n\r\n"
+  },
+  {
+    "repository": "richaa0603/salesforce-assignment",
+    "description": "",
+    "language": "Unknown",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/salesforce-assignment",
+    "topics": [],
+    "readme": "Salesforce Assignment Submission :\r\nRicha Bharti \r\n\r\nCompleted the assignment and have attached screenshots for each task.\r\n"
+  },
+  {
+    "repository": "richaa0603/salesforce-assignment-nitesh-gautam-sir",
+    "description": "",
+    "language": "Unknown",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/salesforce-assignment-nitesh-gautam-sir",
+    "topics": [],
+    "readme": ""
+  },
+  {
+    "repository": "richaa0603/Salesforce-Portfolio",
+    "description": "",
+    "language": "JavaScript",
+    "stars": 0,
+    "html_url": "https://github.com/richaa0603/Salesforce-Portfolio",
+    "topics": [],
+    "readme": "<h1> Portfolio Assignment Submission </h1>"
+  }
+]
