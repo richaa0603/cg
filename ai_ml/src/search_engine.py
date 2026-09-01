@@ -56,7 +56,15 @@ def search_projects(requirement: str, top_k: int = 10) -> list[dict[str, Any]]:
             }
         )
 
-    return results
+    return {
+    "repository": repo["repository"],
+    "description": repo.get("description", ""),
+    "language": repo.get("language", "Unknown"),
+    "stars": repo.get("stars", 0),
+    "url": repo.get("html_url", ""),
+    "source": repo.get("source", "GitHub"),
+    "score": score
+}
 
 
 def main() -> None:

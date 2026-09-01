@@ -297,7 +297,97 @@
 .cc-skeleton-line   { height: 10px; width: 85%; margin-bottom: 7px; }
 .cc-skeleton-line.short { width: 50%; }
 .cc-skeleton-row    { height: 10px; width: 40%; margin-top: 8px; }
+.cc-skeleton-badge  { height: 18px; width: 60px; border-radius: 999px; }
 @keyframes shimmer { to { background-position: -200% 0; } }
+
+/* ─── Similar Repositories — GitHub-style repo card ─────────── */
+.repo-card {
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #0d1117;
+}
+
+.repo-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.repo-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.repo-card-name {
+  margin: 0;
+  font-size: 0.95rem;
+  font-family: "Space Grotesk", sans-serif;
+  color: #58a6ff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.source-badge {
+  flex-shrink: 0;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.source-badge-org {
+  color: #7ee787;
+  border-color: #2ea043;
+  background: rgba(46, 160, 67, 0.15);
+}
+
+.source-badge-github {
+  color: #c9d1d9;
+  border-color: #6e7681;
+  background: rgba(110, 118, 129, 0.15);
+}
+
+.source-badge-azure {
+  color: #79c0ff;
+  border-color: #1f6feb;
+  background: rgba(31, 111, 235, 0.15);
+}
+
+.repo-card-explanation {
+  margin-top: 8px;
+  color: #8b949e;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+.matched-files-wrap {
+  margin-top: 10px;
+}
+
+.matched-files-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #8b949e;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.repo-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 
 /* ─── Exec retry button ──────────────────────────────────── */
 .exec-retry-btn {

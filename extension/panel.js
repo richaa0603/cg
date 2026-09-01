@@ -1,44 +1,17 @@
 const menuItems = [
-  {
-    id: "overview",
-    label: "Overview",
-    subtitle: "Requirement summary and stack inference",
-  },
+  // Only the Similar Repos tab is shown; all other tabs are disabled.
   {
     id: "projects",
-    label: "Similar Projects",
-    subtitle: "GitHub Search API repository matches",
+    label: "Similar Repositories",
+    subtitle: "Repositories that match your requirement",
   },
-  {
-    id: "components",
-    label: "Reusable Components",
-    subtitle: "Reusable module recommendations",
-  },
-  {
-    id: "architecture",
-    label: "Recommended Architecture",
-    subtitle: "Suggested platform topology",
-  },
-  {
-    id: "implementation",
-    label: "Implementation Plan",
-    subtitle: "Execution phases and complexity",
-  },
-  {
-    id: "experts",
-    label: "Experts",
-    subtitle: "Suggested technical experts",
-  },
-  {
-    id: "code-assets",
-    label: "Code Assets",
-    subtitle: "Reusable implementation snippets",
-  },
-  {
-    id: "delivery-risks",
-    label: "Delivery Risks",
-    subtitle: "Requirement-derived risk indicators",
-  },
+  // { id: "overview",        label: "Overview",              subtitle: "Requirement summary and stack inference" },
+  // { id: "components",      label: "Reusable Components",   subtitle: "Reusable module recommendations" },
+  // { id: "architecture",    label: "Recommended Architecture", subtitle: "Suggested platform topology" },
+  // { id: "implementation",  label: "Implementation Plan",   subtitle: "Execution phases and complexity" },
+  // { id: "experts",         label: "Experts",               subtitle: "Suggested technical experts" },
+  // { id: "code-assets",     label: "Code Assets",           subtitle: "Reusable implementation snippets" },
+  // { id: "delivery-risks",  label: "Delivery Risks",        subtitle: "Requirement-derived risk indicators" },
 ];
 
 const menuRoot = document.getElementById("cc-menu");
@@ -688,7 +661,7 @@ async function loadRequirement() {
 async function bootstrapPanel() {
   setupMenu();
   await loadRequirement();
-  renderPage("overview");
+  renderPage("projects");
 }
 
 bootstrapPanel();
@@ -704,9 +677,6 @@ if (isStorageSyncAvailable()) {
     }
 
     currentRequirement = String(changes.projectRequirement?.newValue ?? "");
-
-    const activeButton = menuRoot.querySelector("button.active");
-    const activePage = activeButton?.getAttribute("data-page") || "overview";
-    renderPage(activePage);
+    renderPage("projects");
   });
 }

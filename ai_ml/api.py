@@ -11,12 +11,35 @@ from ai_ml.src.components import recommend_components
 from ai_ml.src.experts import recommend_experts
 from ai_ml.src.risk_engine import recommend_risks
 from ai_ml.src.search_engine import search_projects
+from ai_ml.src.hybrid_search import search as hybrid_search
 
 
-# ── Request DTO ───────────────────────────────────────────────────────────────
+# ── Request DTOs ──────────────────────────────────────────────────────────────
 
 class RequirementRequest(BaseModel):
     requirement: str = Field(..., min_length=3)
+
+
+class SearchRequest(BaseModel):
+    query: str = Field(..., min_length=3)
+
+
+# ── Search response models ────────────────────────────────────────────────────
+
+class SearchResult(BaseModel):
+    repositoryName: str
+    source: str
+    score: int
+    language: str
+    stars: int
+    url: str
+    matchedFiles: list[str]
+    explanation: str
+    matchedCapabilities: list[str]
+
+
+class SearchResponse(BaseModel):
+    results: list[SearchResult]
 
 
 # ── Response models ───────────────────────────────────────────────────────────
@@ -164,6 +187,41 @@ async def full_analysis(req: RequirementRequest):
             experts=[_to_expert(e) for e in exps_raw],
             risks=risk_list,
         )
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+@app.post("/search", response_model=SearchResponse, tags=["search"])
+async def search(req: SearchRequest):
+    """
+    Hybrid search endpoint.
+
+    Workflow:
+      1. Expand query using OpenAI
+      2. Search FAISS (top-50 candidates)
+      3. Analyze repositories (heuristic NLP)
+      4. Rerank using OpenAI
+      5. Apply organisation-priority bonus
+      6. Generate explanations for top-10
+      7. Return top-10 results
+    """
+    try:
+        raw_results = await hybrid_search(req.query)
+        results = [
+            SearchResult(
+                repositoryName=r.get("repositoryName", ""),
+                source=r.get("source", "GitHub"),
+                score=int(r.get("score", 0)),
+                language=r.get("language", "Unknown"),
+                stars=int(r.get("stars", 0)),
+                url=r.get("url", ""),
+                matchedFiles=r.get("matchedFiles", []),
+                explanation=r.get("explanation", ""),
+                matchedCapabilities=r.get("matchedCapabilities", []),
+            )
+            for r in raw_results
+        ]
+        return SearchResponse(results=results)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 

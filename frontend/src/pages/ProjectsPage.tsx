@@ -14,7 +14,18 @@ export default function ProjectsPage() {
   return (
     <motion.section initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} className="page-grid">
       {data.map((p) => (
-        <ProjectCard key={p.repository} name={p.repository} description="" language={p.language} stars={p.stars} url={p.url ?? ""} matchPercentage={p.score} />
+        <ProjectCard
+          key={p.repositoryName}
+          name={p.repositoryName}
+          description={p.description ?? ""}
+          language={p.language}
+          stars={p.stars}
+          url={p.url ?? ""}
+          matchPercentage={p.score}
+          source={p.source}
+          matchedFiles={p.matchedFiles}
+          explanation={p.explanation}
+        />
       ))}
     </motion.section>
   );
@@ -24,10 +35,14 @@ function PageSkeleton() {
   return (
     <div className="page-grid">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="cc-card">
-          <div className="cc-skeleton cc-skeleton-title" />
+        <div key={i} className="repo-card">
+          <div className="repo-card-head">
+            <div className="cc-skeleton cc-skeleton-title" style={{ width: "60%" }} />
+            <div className="cc-skeleton cc-skeleton-badge" />
+          </div>
           <div className="cc-skeleton cc-skeleton-line" />
           <div className="cc-skeleton cc-skeleton-line short" />
+          <div className="cc-skeleton cc-skeleton-row" />
         </div>
       ))}
     </div>
