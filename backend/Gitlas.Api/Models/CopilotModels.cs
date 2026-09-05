@@ -1,4 +1,4 @@
-namespace ConsultantCopilot.Api.Models;
+namespace Gitlas.Api.Models;
 
 public sealed record SimilarProject(
     string Repository,

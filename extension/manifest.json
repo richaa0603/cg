@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Consultant Copilot",
+  "name": "Gitlas",
   "version": "1.0.0",
-  "description": "Discover reusable knowledge and accelerate delivery inside GitHub.",
+  "description": "Gitlas - AI-powered Enterprise Capability Discovery Platform. Discover Before You Build.",
 
   "action": {
+    "default_title": "Gitlas - Discover Before You Build",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
@@ -15,7 +16,12 @@
   },
 
   "permissions": ["storage", "tabs", "activeTab"],
-  "host_permissions": ["https://github.com/*", "https://api.github.com/*"],
+  "host_permissions": [
+    "https://github.com/*",
+    "https://api.github.com/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
 
   "background": {
     "service_worker": "background.js"
@@ -24,14 +30,14 @@
   "content_scripts": [
     {
       "matches": ["https://github.com/*"],
-      "js": ["content.js"],
+      "js": ["gitlas-config.js", "content.js"],
       "run_at": "document_idle"
     }
   ],
 
   "web_accessible_resources": [
     {
-      "resources": ["styles.css", "panel.html", "panel.css", "panel.js"],
+      "resources": ["panel.html", "panel.css", "panel.js", "gitlas-config.js", "app/*"],
       "matches": ["https://github.com/*"]
     }
   ],

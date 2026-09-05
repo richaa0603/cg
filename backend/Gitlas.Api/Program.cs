@@ -1,5 +1,5 @@
 using System.Text.Json;
-using ConsultantCopilot.Api.Services;
+using Gitlas.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +13,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
-    c.SwaggerDoc("v1", new() { Title = "Consultant Copilot API", Version = "v1" }));
+    c.SwaggerDoc("v1", new() { Title = "Gitlas API", Version = "v1" }));
 
 var pythonBase = builder.Configuration["PythonAiService:BaseUrl"]
     ?? throw new InvalidOperationException("PythonAiService:BaseUrl is required in appsettings.json");
@@ -41,7 +41,7 @@ builder.Logging.AddConsole();
 var app = builder.Build();
 
 app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Consultant Copilot API v1"));
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Gitlas API v1"));
 
 app.UseCors("Frontend");
 app.UseAuthorization();

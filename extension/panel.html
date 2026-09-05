@@ -3,29 +3,100 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Consultant Copilot Panel</title>
+    <title>Gitlas</title>
     <link rel="stylesheet" href="panel.css" />
   </head>
   <body>
-    <div id="cc-panel-root" class="cc-shell">
-      <aside class="cc-sidebar">
-        <div class="cc-brand">
-          <div class="cc-logo">CC</div>
-          <div>
-            <div class="cc-name">Consultant Copilot</div>
-            <div class="cc-tag">GitHub Native Insight</div>
-          </div>
+    <div class="g-panel">
+      <header class="g-panel__head">
+        <div class="g-brand">
+          <span class="g-brand__mark" aria-hidden="true">
+            <svg class="g-icon" viewBox="0 0 24 24">
+              <line x1="6" y1="3" x2="6" y2="15" />
+              <circle cx="18" cy="6" r="3" />
+              <circle cx="6" cy="18" r="3" />
+              <path d="M18 9a9 9 0 0 1-9 9" />
+            </svg>
+          </span>
+          <span>
+            <span class="g-brand__name">Gitlas</span>
+            <span class="g-brand__tag">Discover Before You Build</span>
+          </span>
         </div>
-        <nav class="cc-menu" id="cc-menu"></nav>
-      </aside>
-      <main class="cc-main">
-        <header class="cc-header">
-          <h1 id="cc-title">Overview</h1>
-          <p id="cc-subtitle">Project summary and recommendations.</p>
-        </header>
-        <section id="cc-content" class="cc-content"></section>
+        <button id="close-panel" type="button" class="g-icon-btn" aria-label="Close Gitlas panel">
+          <svg class="g-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </header>
+
+      <main class="g-panel__body">
+        <section id="repo-context" class="g-card" hidden>
+          <span class="g-label">Current repository</span>
+          <div class="g-row">
+            <span id="repo-source" class="g-badge">GitHub</span>
+            <span id="repo-name" class="g-mono g-repo-name"></span>
+          </div>
+          <button id="open-repo" type="button" class="g-btn g-btn--block">
+            <svg class="g-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Open repository
+          </button>
+        </section>
+
+        <section class="g-card">
+          <label class="g-label" for="requirement-input">What capability do you need?</label>
+          <textarea
+            id="requirement-input"
+            placeholder="Describe the capability, for example: employee leave management with approval workflow and email notifications."
+          ></textarea>
+          <button id="discover-btn" type="button" class="g-btn g-btn--primary g-btn--block">
+            <svg class="g-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            Discover in Gitlas
+          </button>
+        </section>
+
+        <section>
+          <span class="g-label">Example requirements</span>
+          <div id="examples" class="g-chip-row"></div>
+        </section>
+
+        <section>
+          <span class="g-label">Open in Gitlas</span>
+          <div class="g-route-grid">
+            <button type="button" class="g-route" data-route="/">Discover</button>
+            <button type="button" class="g-route" data-route="/search">Search Results</button>
+            <button type="button" class="g-route" data-route="/components">Reusable Components</button>
+            <button type="button" class="g-route" data-route="/access">Access Requests</button>
+          </div>
+        </section>
+
+        <section>
+          <span class="g-label">Connected platforms</span>
+          <div class="g-chip-row">
+            <span class="g-badge g-badge--github">GitHub</span>
+            <span class="g-badge g-badge--azure">Azure DevOps</span>
+            <span class="g-badge g-badge--salesforce">Salesforce</span>
+          </div>
+        </section>
       </main>
+
+      <footer class="g-panel__foot">
+        <span id="app-status" class="g-status">
+          <span class="g-status__dot" aria-hidden="true"></span>
+          <span id="app-status-text">Checking Gitlas app…</span>
+        </span>
+      </footer>
     </div>
+
+    <script src="gitlas-config.js"></script>
     <script src="panel.js"></script>
   </body>
 </html>

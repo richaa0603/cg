@@ -19,7 +19,7 @@ def _request_headers() -> dict[str, str]:
 
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "ConsultantCopilot"
+        "User-Agent": "Gitlas"
     }
 
     if token:

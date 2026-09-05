@@ -3,45 +3,104 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Consultant Copilot</title>
+    <title>Gitlas</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <main class="popup-shell">
-      <section id="welcome-screen" class="screen active">
-        <div class="logo-chip">🔍</div>
-        <h1>Consultant Copilot</h1>
-        <p>Discover reusable knowledge and accelerate delivery.</p>
-        <button id="start-btn" class="btn-primary">Start</button>
+    <div class="aurora" aria-hidden="true"></div>
+
+    <div class="app">
+      <header class="hero">
+        <span class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <line x1="6" y1="3" x2="6" y2="15" />
+            <circle cx="18" cy="6" r="3" />
+            <circle cx="6" cy="18" r="3" />
+            <path d="M18 9a9 9 0 0 1-9 9" />
+          </svg>
+        </span>
+        <h1 class="wordmark">Gitlas</h1>
+        <p class="tagline">Discover Before You Build</p>
+      </header>
+
+      <section class="search" aria-label="Describe what you are building">
+        <textarea
+          id="query"
+          rows="2"
+          maxlength="400"
+          placeholder="What are you trying to build?"
+          autofocus
+        ></textarea>
+        <ul id="examples" class="examples"></ul>
       </section>
 
-      <section id="requirement-screen" class="screen" aria-hidden="true">
-        <h2>Project Requirement Intake</h2>
+      <section class="block">
+        <h2 class="block__title">Popular capabilities</h2>
+        <div id="capabilities" class="chips"></div>
+      </section>
 
-        <label for="requirement-input" class="label">Project Requirements</label>
-        <textarea
-          id="requirement-input"
-          placeholder="Describe scope, technology, constraints, timeline, and expected outcomes."
-        ></textarea>
+      <section id="recent-block" class="block" hidden>
+        <div class="block__head">
+          <h2 class="block__title">Recent searches</h2>
+          <button id="clear-recent" type="button" class="link">Clear</button>
+        </div>
+        <ul id="recent" class="recent"></ul>
+      </section>
+    </div>
 
-        <input
-          id="document-input"
-          type="file"
-          accept=".pdf,.docx,.txt,.doc"
-          hidden
-        />
+    <div class="dock">
+      <button id="cta" type="button" class="cta">
+        <svg class="cta__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        Search Enterprise Knowledge
+      </button>
 
-        <div class="button-row">
-          <button id="upload-brd" class="btn-secondary">Upload BRD</button>
-          <button id="upload-doc" class="btn-secondary">Upload PDF</button>
+      <footer class="footer">
+        <span class="footer__sources">GitHub &middot; Azure DevOps &middot; Salesforce</span>
+        <button id="open-settings" type="button" class="footer__gear" aria-label="Gitlas settings" title="Settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+            />
+          </svg>
+        </button>
+      </footer>
+    </div>
+
+    <div id="settings-sheet" class="sheet" hidden>
+      <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+        <div class="sheet__head">
+          <h2 id="sheet-title" class="sheet__title">Settings</h2>
+          <button id="close-settings" type="button" class="sheet__close" aria-label="Close settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
         </div>
 
-        <p id="file-name" class="file-name">No file selected</p>
+        <label class="field">
+          <span class="field__label">Gitlas app URL</span>
+          <input id="base-url" type="url" spellcheck="false" placeholder="http://localhost:5173" />
+        </label>
 
-        <button id="analyze-btn" class="btn-primary">Analyze</button>
-      </section>
-    </main>
+        <label class="toggle">
+          <input id="use-bundled" type="checkbox" />
+          <span>
+            Use bundled build
+            <span class="toggle__hint">Runs the packaged app from <code>extension/app</code>.</span>
+          </span>
+        </label>
 
+        <button id="save-settings" type="button" class="sheet__save">Save</button>
+        <p id="sheet-status" class="sheet__status" role="status"></p>
+      </div>
+    </div>
+
+    <script src="gitlas-config.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

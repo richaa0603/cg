@@ -1,6 +1,6 @@
-using ConsultantCopilot.Api.Models;
+using Gitlas.Api.Models;
 
-namespace ConsultantCopilot.Api.Services;
+namespace Gitlas.Api.Services;
 
 public interface ICopilotService
 {

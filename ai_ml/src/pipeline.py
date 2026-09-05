@@ -33,7 +33,7 @@ def run_pipeline(seed_query: str, requirement_query: str, max_repos: int = 1000)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Consultant Copilot AI/ML pipeline")
+    parser = argparse.ArgumentParser(description="Gitlas AI/ML pipeline")
     parser.add_argument("--seed-query", required=True, help="GitHub dataset search query")
     parser.add_argument("--query", required=True, help="Requirement query to search in FAISS")
     parser.add_argument("--max-repos", type=int, default=1000, help="Maximum repos to collect")

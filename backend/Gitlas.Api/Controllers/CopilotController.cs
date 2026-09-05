@@ -1,8 +1,8 @@
-using ConsultantCopilot.Api.DTOs;
-using ConsultantCopilot.Api.Services;
+using Gitlas.Api.DTOs;
+using Gitlas.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ConsultantCopilot.Api.Controllers;
+namespace Gitlas.Api.Controllers;
 
 [ApiController]
 [Route("api/copilot")]

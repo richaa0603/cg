@@ -1,6 +1,6 @@
-# Consultant Copilot AI/ML Layer
+# Gitlas AI/ML Layer
 
-This module builds an engineering knowledge discovery system for Consultant Copilot.
+This module builds an engineering knowledge discovery system for Gitlas, the AI-powered Enterprise Capability Discovery Platform.
 
 Input example:
 - "Need an attendance management system"

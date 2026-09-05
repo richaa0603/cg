@@ -1,8 +1,8 @@
 using System.Net.Http.Json;
 using System.Text.Json;
-using ConsultantCopilot.Api.Models;
+using Gitlas.Api.Models;
 
-namespace ConsultantCopilot.Api.Services;
+namespace Gitlas.Api.Services;
 
 public sealed class CopilotService(HttpClient http, ILogger<CopilotService> logger) : ICopilotService
 {

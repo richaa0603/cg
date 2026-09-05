@@ -1,0 +1,9 @@
+C:\Users\RichaBharti\Desktop\consultant-copilot\backend\Gitlas.Api\obj\Debug\net9.0\Gitlas.Api.csproj.AssemblyReference.cache
+C:\Users\RichaBharti\Desktop\consultant-copilot\backend\Gitlas.Api\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\RichaBharti\Desktop\consultant-copilot\backend\Gitlas.Api\obj\Debug\net9.0\Gitlas.Api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\RichaBharti\Desktop\consultant-copilot\backend\Gitlas.Api\obj\Debug\net9.0\Gitlas.Api.AssemblyInfoInputs.cache
+C:\Users\RichaBharti\Desktop\consultant-copilot\backend\Gitlas.Api\obj\Debug\net9.0\Gitlas.Api.AssemblyInfo.cs
+C:\Users\RichaBharti\Desktop\consultant-copilot\backend\Gitlas.Api\obj\Debug\net9.0\Gitlas.Api.csproj.CoreCompileInputs.cache
+C:\Users\RichaBharti\Desktop\consultant-copilot\backend\Gitlas.Api\obj\Debug\net9.0\Gitlas.Api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\RichaBharti\Desktop\consultant-copilot\backend\Gitlas.Api\obj\Debug\net9.0\Gitlas.Api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\RichaBharti\Desktop\consultant-copilot\backend\Gitlas.Api\obj\Debug\net9.0\Gitlas.Api.sourcelink.json

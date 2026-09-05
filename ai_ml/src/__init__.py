@@ -1,1 +1,1 @@
-"""Consultant Copilot AI/ML package."""
+"""Gitlas AI/ML package."""

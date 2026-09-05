@@ -1,4 +1,4 @@
-"""Production FastAPI service for Consultant Copilot AI engine."""
+"""Production FastAPI service for Gitlas AI engine."""
 import asyncio
 from contextlib import asynccontextmanager
 
@@ -80,7 +80,7 @@ async def _lifespan(_app: FastAPI):
 
 
 app = FastAPI(
-    title="Consultant Copilot AI API",
+    title="Gitlas AI API",
     description="Engineering knowledge discovery and recommendation engine.",
     version="1.0.0",
     lifespan=_lifespan,
@@ -124,7 +124,7 @@ def _to_expert(raw: dict) -> Expert:
 
 @app.get("/health", tags=["ops"])
 def health():
-    return {"status": "ok", "service": "consultant-copilot-ai"}
+    return {"status": "ok", "service": "gitlas-ai"}
 
 
 @app.post("/copilot/search", response_model=list[SimilarProject], tags=["copilot"])

@@ -1,19 +1,14 @@
 import { useEffect } from "react";
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar.tsx";
-import Sidebar from "./components/Sidebar.tsx";
-//import OverviewPage from "./pages/OverviewPage.tsx";
-//import ProjectsPage from "./pages/ProjectsPage.tsx";
-//import ComponentsPage from "./pages/ComponentsPage.tsx";
-//import ArchitecturePage from "./pages/ArchitecturePage.tsx";
-//import ImplementationPlanPage from "./pages/ImplementationPlanPage.tsx";
-//import CodeAssetsPage from "./pages/CodeAssetsPage.tsx";
-//import DeliveryRisksPage from "./pages/DeliveryRisksPage.tsx";
-//import KnowledgeGraphPage from "./pages/KnowledgeGraphPage.tsx";
-//import CopilotChatPage from "./pages/CopilotChatPage.tsx";
-//import ExecutiveSummaryPage from "./pages/ExecutiveSummaryPage.tsx";
+import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { Sidebar } from "./components/gitlas/Sidebar";
+import { Topbar } from "./components/gitlas/Topbar";
+import { AccessRequestPage } from "./pages/AccessRequestPage";
+import { HomePage } from "./pages/HomePage";
+import { RepositoryDetailsPage } from "./pages/RepositoryDetailsPage";
+import { ReusableComponentsPage } from "./pages/ReusableComponentsPage";
+import { SearchResultsPage } from "./pages/SearchResultsPage";
 
-type CopilotMessage = {
+type GitlasMessage = {
   type?: string;
   payload?: {
     requirement?: string;
@@ -21,57 +16,55 @@ type CopilotMessage = {
   };
 };
 
-function ShellLayout() {
+function AppShell() {
   return (
-    <div className="panel-app-shell">
+    <div className="g-shell">
       <Sidebar />
-      <section className="panel-main">
-        <Navbar />
-        <div className="panel-content">
+      <div className="g-main">
+        <Topbar />
+        <main className="g-content">
           <Outlet />
-        </div>
-      </section>
+        </main>
+      </div>
     </div>
   );
 }
 
-function App() {
+export default function App() {
+  const navigate = useNavigate();
+
+  // The browser extension host posts a requirement into the embedded panel.
   useEffect(() => {
-    const onMessage = (event: MessageEvent<CopilotMessage>) => {
-      if (event.data?.type !== "CC_CONTEXT") {
-        return;
-      }
+    const onMessage = (event: MessageEvent<GitlasMessage>) => {
+      if (event.data?.type !== "GITLAS_CONTEXT") return;
 
       const requirement = event.data.payload?.requirement?.trim() ?? "";
       const uploadedFileName = event.data.payload?.uploadedFileName?.trim() ?? "";
 
-      localStorage.setItem("projectRequirement", requirement);
-      localStorage.setItem("uploadedDocumentName", uploadedFileName);
-      window.dispatchEvent(new CustomEvent("cc-context-updated"));
+      localStorage.setItem("gitlas.requirement", requirement);
+      localStorage.setItem("gitlas.uploadedDocumentName", uploadedFileName);
+      window.dispatchEvent(new CustomEvent("gitlas-context-updated"));
+
+      if (requirement) {
+        navigate(`/search?q=${encodeURIComponent(requirement)}`);
+      }
     };
 
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, []);
+  }, [navigate]);
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/executive" replace />} />
-      <Route element={<ShellLayout />}>
-        {/* <Route path="/executive" element={<ExecutiveSummaryPage />} />
-        <Route path="/overview" element={<OverviewPage />} />
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/components" element={<ComponentsPage />} />
-        <Route path="/architecture" element={<ArchitecturePage />} />
-        <Route path="/implementation-plan" element={<ImplementationPlanPage />} />
-        <Route path="/code-assets" element={<CodeAssetsPage />} />
-        <Route path="/delivery-risks" element={<DeliveryRisksPage />} />
-        <Route path="/knowledge-graph" element={<KnowledgeGraphPage />} />
-        <Route path="/copilot-chat" element={<CopilotChatPage />} /> */}
+      <Route element={<AppShell />}>
+        <Route index element={<HomePage />} />
+        <Route path="/search" element={<SearchResultsPage />} />
+        <Route path="/repository/:repositoryId" element={<RepositoryDetailsPage />} />
+        <Route path="/components" element={<ReusableComponentsPage />} />
+        <Route path="/access" element={<AccessRequestPage />} />
+        <Route path="/access/:repositoryId" element={<AccessRequestPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
-      <Route path="*" element={<Navigate to="/overview" replace />} />
     </Routes>
   );
 }
-
-export default App;

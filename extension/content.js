@@ -1,24 +1,81 @@
-console.log("Consultant Copilot content script loaded");
+console.log("Gitlas content script loaded");
 
-const ROOT_ID = "consultant-copilot-root";
-const NAV_ITEM_ID = "consultant-copilot-nav-item";
-const DRAWER_WIDTH = "500px";
+const ROOT_ID = "gitlas-root";
+const NAV_ITEM_ID = "gitlas-nav-item";
+const DRAWER_WIDTH = "460px";
+
+const { STORAGE_KEYS, MESSAGE_TYPE } = globalThis.Gitlas;
 
 let panelOpen = false;
+let panelFrame = null;
 
 function storageSyncAvailable() {
-  return Boolean(
-    typeof chrome !== "undefined" &&
-      chrome.storage &&
-      chrome.storage.sync,
+  return globalThis.Gitlas.storageAvailable();
+}
+
+/**
+ * Derives the Gitlas `Repository` shape from the GitHub URL so the drawer can
+ * hand it straight to resolveRepositoryUrl().
+ */
+function detectRepository() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  if (segments.length < 2) return null;
+
+  const [owner, name] = segments;
+  const reserved = new Set([
+    "settings",
+    "notifications",
+    "explore",
+    "marketplace",
+    "pulls",
+    "issues",
+    "codespaces",
+    "sponsors",
+    "orgs",
+    "topics",
+    "search",
+    "new",
+  ]);
+  if (reserved.has(owner.toLowerCase())) return null;
+
+  const repositoryName = `${owner}/${name}`;
+  return {
+    repositoryName,
+    source: "github",
+    url: `${window.location.origin}/${repositoryName}`,
+  };
+}
+
+async function readRequirement() {
+  if (!storageSyncAvailable()) return "";
+
+  try {
+    const data = await chrome.storage.sync.get([STORAGE_KEYS.requirement]);
+    return String(data?.[STORAGE_KEYS.requirement] ?? "");
+  } catch (error) {
+    console.error("Gitlas: failed to read stored requirement", error);
+    return "";
+  }
+}
+
+async function postContextToPanel() {
+  if (!panelFrame?.contentWindow) return;
+
+  panelFrame.contentWindow.postMessage(
+    {
+      type: MESSAGE_TYPE,
+      payload: {
+        repository: detectRepository(),
+        requirement: await readRequirement(),
+      },
+    },
+    "*",
   );
 }
 
 function createDrawerContainer() {
   const existing = document.getElementById(ROOT_ID);
-  if (existing) {
-    return existing;
-  }
+  if (existing) return existing;
 
   const root = document.createElement("div");
   root.id = ROOT_ID;
@@ -27,23 +84,26 @@ function createDrawerContainer() {
   root.style.top = "0";
   root.style.height = "100vh";
   root.style.width = DRAWER_WIDTH;
-  root.style.zIndex = "999999";
+  root.style.maxWidth = "100vw";
+  root.style.zIndex = "2147483000";
   root.style.transform = "translateX(100%)";
   root.style.transition = "transform 0.25s ease";
-  root.style.background = "#0F172A";
-  root.style.borderLeft = "1px solid #334155";
-  root.style.boxShadow = "-12px 0 30px rgba(0,0,0,0.35)";
+  root.style.background = "#070b14";
+  root.style.borderLeft = "1px solid #1f2b40";
+  root.style.boxShadow = "-18px 0 46px rgba(0,0,0,0.55)";
 
   const iframe = document.createElement("iframe");
-  iframe.title = "Consultant Copilot";
+  iframe.title = "Gitlas";
   iframe.src = chrome.runtime.getURL("panel.html");
   iframe.style.width = "100%";
   iframe.style.height = "100%";
   iframe.style.border = "0";
-  iframe.style.background = "#0F172A";
+  iframe.style.background = "#070b14";
+  iframe.addEventListener("load", () => void postContextToPanel());
 
   root.appendChild(iframe);
   document.body.appendChild(root);
+  panelFrame = iframe;
 
   return root;
 }
@@ -51,39 +111,36 @@ function createDrawerContainer() {
 function setDrawerOpen(open) {
   const drawer = createDrawerContainer();
   panelOpen = open;
-  if (open) {
-    console.log("Opening Copilot drawer");
-  }
   drawer.style.transform = open ? "translateX(0)" : "translateX(100%)";
+
+  if (open) void postContextToPanel();
 }
 
 function createNavItem() {
-  if (document.getElementById(NAV_ITEM_ID)) {
-    return;
-  }
+  if (document.getElementById(NAV_ITEM_ID)) return;
 
   const navContainer =
     document.querySelector("[aria-label='Global']") ||
     document.querySelector(".AppHeader-globalBar") ||
     document.querySelector("header .AppHeader-context-full");
 
-  if (!navContainer) {
-    return;
-  }
+  if (!navContainer) return;
 
-  console.log("Injecting Consultant Copilot button");
+  console.log("Injecting Gitlas button");
 
   const button = document.createElement("button");
   button.id = NAV_ITEM_ID;
   button.type = "button";
-  button.textContent = "Consultant Copilot";
+  button.textContent = "Gitlas";
+  button.title = "Gitlas - Discover Before You Build";
   button.style.marginLeft = "12px";
-  button.style.border = "1px solid #334155";
+  button.style.border = "1px solid rgba(109,94,252,0.45)";
   button.style.borderRadius = "999px";
-  button.style.padding = "7px 12px";
-  button.style.background = "#1E293B";
-  button.style.color = "#E2E8F0";
+  button.style.padding = "6px 13px";
+  button.style.background = "linear-gradient(135deg, rgba(109,94,252,0.9), rgba(34,211,238,0.75))";
+  button.style.color = "#fff";
   button.style.fontSize = "12px";
+  button.style.fontWeight = "600";
   button.style.cursor = "pointer";
 
   button.addEventListener("click", (event) => {
@@ -95,36 +152,43 @@ function createNavItem() {
   navContainer.appendChild(button);
 }
 
+window.addEventListener("message", (event) => {
+  if (event.data?.type === "GITLAS_CLOSE_PANEL") setDrawerOpen(false);
+});
+
 async function bootstrap() {
   if (!storageSyncAvailable()) {
-    console.error("Chrome storage unavailable");
+    console.error("Gitlas: chrome.storage is unavailable");
     return;
   }
 
   try {
-    const data = await chrome.storage.sync.get([
-      "projectRequirement",
-      "copilotAutoOpen",
-    ]);
+    const data = await chrome.storage.sync.get([STORAGE_KEYS.autoOpenPanel]);
 
     createNavItem();
     createDrawerContainer();
 
-    if (data?.copilotAutoOpen) {
+    if (data?.[STORAGE_KEYS.autoOpenPanel]) {
       setDrawerOpen(true);
-      await chrome.storage.sync.set({ copilotAutoOpen: false });
+      await chrome.storage.sync.set({ [STORAGE_KEYS.autoOpenPanel]: false });
     }
   } catch (error) {
-    console.error("Failed to initialize drawer state", error);
+    console.error("Gitlas: failed to initialize drawer state", error);
   }
 }
 
 function startWhenDomReady() {
-  console.log("GitHub page detected");
   void bootstrap();
 
+  // GitHub navigates client-side, so re-inject the button and refresh context.
+  let lastPath = window.location.pathname;
   const observer = new MutationObserver(() => {
     createNavItem();
+
+    if (window.location.pathname !== lastPath) {
+      lastPath = window.location.pathname;
+      if (panelOpen) void postContextToPanel();
+    }
   });
   observer.observe(document.documentElement, { childList: true, subtree: true });
 }
