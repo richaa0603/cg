@@ -72,10 +72,6 @@ export function RepositoryCard({ repository, onCapabilitySelect }: RepositoryCar
         <SourceBadge source={repository.source} />
       </header>
 
-      <div className="g-row g-row--wrap" style={{ gap: 8 }}>
-        <CapabilityChips capabilities={repository.capabilities} max={3} onSelect={onCapabilitySelect} />
-      </div>
-
       {expanded && (
         <div className="g-repository-card__details g-stack g-stack-14">
           <p className="g-card__desc">{repository.description}</p>
