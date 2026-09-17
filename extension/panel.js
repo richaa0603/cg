@@ -21,14 +21,9 @@ const statusText = document.getElementById("app-status-text");
 /** Repository the drawer is currently showing, in Gitlas `Repository` shape. */
 let currentRepository = null;
 
-function openUrl(url) {
-  if (!url) return;
-  // The panel is framed by github.com, so navigation has to happen top-level.
-  window.open(url, "_blank", "noopener,noreferrer");
-}
-
 async function launch(route, params) {
-  openUrl(await globalThis.Gitlas.buildRoute(route, params));
+  const panelParams = { ...(params ?? {}), panel: "1" };
+  window.location.assign(await globalThis.Gitlas.buildRoute(route, panelParams));
 }
 
 async function discover() {
@@ -41,7 +36,7 @@ async function discover() {
     });
   }
 
-  await launch(requirement ? ROUTES.search : ROUTES.discover, requirement ? { q: requirement } : undefined);
+  await launch(ROUTES.discover, requirement ? { q: requirement } : undefined);
 }
 
 function renderRepository(repository) {
@@ -118,7 +113,7 @@ closeButton.addEventListener("click", () => {
 });
 
 openRepoButton.addEventListener("click", () => {
-  openUrl(globalThis.Gitlas.resolveRepositoryUrl(currentRepository));
+  globalThis.Gitlas.openRepositorySource(currentRepository);
 });
 
 discoverButton.addEventListener("click", () => void discover());
@@ -128,10 +123,6 @@ requirementInput.addEventListener("keydown", (event) => {
     event.preventDefault();
     void discover();
   }
-});
-
-document.querySelectorAll(".g-route").forEach((button) => {
-  button.addEventListener("click", () => void launch(button.dataset.route));
 });
 
 renderExamples();

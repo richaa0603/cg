@@ -1,9 +1,16 @@
-import { ArrowUpRight, Blocks, Lightbulb, Network, Sparkles, Zap } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowUpRight, Blocks, CircleAlert, Lightbulb, Network, SearchX, Sparkles, Zap } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { EmptyState } from "../components/gitlas/EmptyState";
+import { LoadingGrid } from "../components/gitlas/Loading";
+import { RepositoryCard } from "../components/gitlas/RepositoryCard";
 import { SearchBar } from "../components/gitlas/SearchBar";
 import { SourceBadge } from "../components/gitlas/SourceBadge";
 import { EXAMPLE_REQUIREMENTS, PLATFORM_STATS } from "../data/mockData";
+import { useAsync } from "../hooks/useAsync";
+import { useSearchHistory } from "../hooks/useSearchHistory";
 import { ALL_SOURCES } from "../lib/platform";
+import { searchRepositories } from "../services/gitlasClient";
+import type { Repository } from "../types/gitlas";
 
 const VALUE_PROPS = [
   {
@@ -29,11 +36,28 @@ const VALUE_PROPS = [
 ];
 
 export function HomePage() {
-  const navigate = useNavigate();
+  const routeQuery = new URLSearchParams(window.location.hash.split("?")[1] ?? "").get("q") ?? "";
+  const [query, setQuery] = useState(routeQuery);
+  const { record } = useSearchHistory();
+  const fetcher = useCallback((signal: AbortSignal) => searchRepositories(query, { signal }), [query]);
+  const { status, data, error } = useAsync<Repository[]>(fetcher, query, query.length > 0);
 
   const runSearch = (query: string) => {
-    navigate(`/search?q=${encodeURIComponent(query)}`);
+    setQuery(query.trim());
   };
+
+  useEffect(() => {
+    const receiveContext = (event: Event) => {
+      const requirement = (event as CustomEvent<{ requirement?: string }>).detail?.requirement?.trim();
+      if (requirement) runSearch(requirement);
+    };
+    window.addEventListener("gitlas-context-updated", receiveContext);
+    return () => window.removeEventListener("gitlas-context-updated", receiveContext);
+  }, []);
+
+  useEffect(() => {
+    if (status === "success" && data) record(query, data.length);
+  }, [status, data, query, record]);
 
   return (
     <div className="g-stack g-stack-28">
@@ -51,7 +75,7 @@ export function HomePage() {
           </div>
 
           <div className="g-hero__search">
-            <SearchBar size="lg" autoFocus onSearch={runSearch} />
+            <SearchBar initialValue={query} size="lg" autoFocus busy={status === "loading"} onSearch={runSearch} />
           </div>
 
           <div className="g-row g-row--wrap" style={{ justifyContent: "center", gap: 8 }}>
@@ -62,6 +86,51 @@ export function HomePage() {
         </div>
       </section>
 
+      {query ? (
+        <section className="g-stack g-stack-14" aria-live="polite">
+          {status === "loading" && <LoadingGrid />}
+          {status === "error" && (
+            <EmptyState
+              icon={<CircleAlert size={26} />}
+              title="Search could not complete"
+              body={error ?? "The discovery API is unavailable."}
+              action={
+                <button type="button" className="g-btn g-btn--primary" onClick={() => runSearch(query)}>
+                  Retry
+                </button>
+              }
+            />
+          )}
+          {status === "success" && data && (
+            <>
+              <div className="g-row g-row--between g-row--wrap">
+                <h2 className="g-label">Repository matches</h2>
+                <span className="g-muted" style={{ fontSize: 12 }}>
+                  {data.length} results
+                </span>
+              </div>
+              {data.length === 0 ? (
+                <EmptyState
+                  icon={<SearchX size={26} />}
+                  title="No repositories found"
+                  body="Try describing the capability with broader technical keywords."
+                />
+              ) : (
+                <div className="g-repository-list">
+                  {data.map((repository) => (
+                    <RepositoryCard
+                      key={repository.id}
+                      repository={repository}
+                      onCapabilitySelect={runSearch}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </section>
+      ) : (
+        <>
       <section className="g-stack g-stack-14">
         <div className="g-row" style={{ gap: 8 }}>
           <Lightbulb size={16} style={{ color: "var(--g-brand-3)" }} />
@@ -124,6 +193,8 @@ export function HomePage() {
           ))}
         </div>
       </section>
+        </>
+      )}
     </div>
   );
 }

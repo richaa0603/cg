@@ -2,9 +2,9 @@ console.log("Gitlas content script loaded");
 
 const ROOT_ID = "gitlas-root";
 const NAV_ITEM_ID = "gitlas-nav-item";
-const DRAWER_WIDTH = "460px";
+const DRAWER_WIDTH = "700px";
 
-const { STORAGE_KEYS, MESSAGE_TYPE } = globalThis.Gitlas;
+const { STORAGE_KEYS, MESSAGE_TYPE, ROUTES, BUNDLED_APP_PATH } = globalThis.Gitlas;
 
 let panelOpen = false;
 let panelFrame = null;
@@ -116,6 +116,19 @@ function setDrawerOpen(open) {
   if (open) void postContextToPanel();
 }
 
+function openSearchInDrawer(requirement) {
+  const query = String(requirement ?? "").trim();
+  const drawer = createDrawerContainer();
+  const iframe = drawer.querySelector("iframe");
+  const appRoot = chrome.runtime.getURL(BUNDLED_APP_PATH);
+
+  iframe.src = globalThis.Gitlas.buildUrl(appRoot, ROUTES.discover, {
+    q: query,
+    panel: "1",
+  });
+  setDrawerOpen(true);
+}
+
 function createNavItem() {
   if (document.getElementById(NAV_ITEM_ID)) return;
 
@@ -154,6 +167,11 @@ function createNavItem() {
 
 window.addEventListener("message", (event) => {
   if (event.data?.type === "GITLAS_CLOSE_PANEL") setDrawerOpen(false);
+});
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message?.type !== "GITLAS_OPEN_SEARCH") return;
+  openSearchInDrawer(message.payload?.requirement);
 });
 
 async function bootstrap() {

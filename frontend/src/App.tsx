@@ -1,12 +1,12 @@
+import { X } from "lucide-react";
 import { useEffect } from "react";
-import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { Sidebar } from "./components/gitlas/Sidebar";
 import { Topbar } from "./components/gitlas/Topbar";
 import { AccessRequestPage } from "./pages/AccessRequestPage";
 import { HomePage } from "./pages/HomePage";
 import { RepositoryDetailsPage } from "./pages/RepositoryDetailsPage";
 import { ReusableComponentsPage } from "./pages/ReusableComponentsPage";
-import { SearchResultsPage } from "./pages/SearchResultsPage";
 
 type GitlasMessage = {
   type?: string;
@@ -17,11 +17,29 @@ type GitlasMessage = {
 };
 
 function AppShell() {
+  const location = useLocation();
+  const isPanel = new URLSearchParams(location.search).get("panel") === "1";
+
   return (
-    <div className="g-shell">
-      <Sidebar />
+    <div className={`g-shell${isPanel ? " g-shell--panel" : ""}`}>
+      {!isPanel && <Sidebar />}
       <div className="g-main">
-        <Topbar />
+        {isPanel ? (
+          <header className="g-plugin-bar">
+            <strong>Gitlas</strong>
+            <span>Discover Before You Build</span>
+            <button
+              type="button"
+              className="g-btn g-btn--ghost g-btn--sm"
+              aria-label="Close Gitlas panel"
+              onClick={() => window.parent.postMessage({ type: "GITLAS_CLOSE_PANEL" }, "*")}
+            >
+              <X size={16} />
+            </button>
+          </header>
+        ) : (
+          <Topbar />
+        )}
         <main className="g-content">
           <Outlet />
         </main>
@@ -31,8 +49,6 @@ function AppShell() {
 }
 
 export default function App() {
-  const navigate = useNavigate();
-
   // The browser extension host posts a requirement into the embedded panel.
   useEffect(() => {
     const onMessage = (event: MessageEvent<GitlasMessage>) => {
@@ -43,22 +59,20 @@ export default function App() {
 
       localStorage.setItem("gitlas.requirement", requirement);
       localStorage.setItem("gitlas.uploadedDocumentName", uploadedFileName);
-      window.dispatchEvent(new CustomEvent("gitlas-context-updated"));
-
       if (requirement) {
-        navigate(`/search?q=${encodeURIComponent(requirement)}`);
+        window.dispatchEvent(new CustomEvent("gitlas-context-updated", { detail: { requirement } }));
       }
     };
 
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, [navigate]);
+  }, []);
 
   return (
     <Routes>
       <Route element={<AppShell />}>
         <Route index element={<HomePage />} />
-        <Route path="/search" element={<SearchResultsPage />} />
+        <Route path="/search" element={<Navigate to="/" replace />} />
         <Route path="/repository/:repositoryId" element={<RepositoryDetailsPage />} />
         <Route path="/components" element={<ReusableComponentsPage />} />
         <Route path="/access" element={<AccessRequestPage />} />

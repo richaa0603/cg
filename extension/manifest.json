@@ -19,6 +19,7 @@
   "host_permissions": [
     "https://github.com/*",
     "https://api.github.com/*",
+    "https://*/*",
     "http://localhost/*",
     "http://127.0.0.1/*"
   ],

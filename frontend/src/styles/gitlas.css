@@ -237,6 +237,45 @@ ul {
   min-width: 0;
 }
 
+.g-shell--panel {
+  display: block;
+  width: 700px;
+  min-width: 700px;
+}
+
+body:has(.g-shell--panel),
+body:has(.g-shell--panel) #root {
+  width: 700px;
+  min-width: 700px;
+}
+
+.g-shell--panel .g-content {
+  max-width: none;
+  padding: 14px;
+}
+
+.g-plugin-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--g-border);
+  background: rgba(7, 11, 20, 0.96);
+}
+
+.g-plugin-bar span {
+  overflow: hidden;
+  color: var(--g-text-faint);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .g-topbar {
   position: sticky;
   top: 0;
@@ -366,6 +405,92 @@ ul {
   padding-top: 14px;
   margin-top: 14px;
   border-top: 1px solid var(--g-border);
+}
+
+.g-repository-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.g-repository-card {
+  gap: 12px;
+  padding: 16px;
+}
+
+.g-repository-card__details {
+  padding-top: 14px;
+  border-top: 1px solid var(--g-border);
+}
+
+.g-repository-card__score {
+  color: var(--g-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.g-repository-card__name {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.g-repository-card__name:hover {
+  color: var(--g-brand-2);
+  text-decoration: underline;
+}
+
+.g-repository-card__lock {
+  flex: 0 0 auto;
+  color: var(--g-warn);
+}
+
+.g-chevron {
+  transition: transform var(--g-fast);
+}
+
+.g-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.g-shell--panel .g-hero {
+  padding: 24px 14px 20px;
+  border-radius: var(--g-radius);
+}
+
+.g-shell--panel .g-hero__eyebrow,
+.g-shell--panel .g-hero__sub {
+  display: none;
+}
+
+.g-shell--panel .g-hero__title {
+  font-size: 25px;
+}
+
+.g-shell--panel .g-search {
+  align-items: stretch;
+  flex-wrap: wrap;
+  padding: 8px;
+  border-radius: var(--g-radius);
+}
+
+.g-shell--panel .g-search > svg {
+  display: none;
+}
+
+.g-shell--panel .g-search__input {
+  flex-basis: calc(100% - 42px);
+  padding: 8px;
+}
+
+.g-shell--panel .g-search .g-btn--primary {
+  flex: 1 0 100%;
+}
+
+.g-shell--panel .g-card__footer {
+  align-items: stretch;
 }
 
 /* --- Typography helpers --------------------------------------------------- */

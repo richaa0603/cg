@@ -1,4 +1,5 @@
-import type { PlatformStat, Repository, ReusableComponent } from "../types/gitlas";
+import type { PlatformStat, Repository, ReusableComponent, RepositorySource } from "../types/gitlas";
+import repositoryCatalog from "./repositories.json";
 
 export const EXAMPLE_REQUIREMENTS: string[] = [
   "Employee leave management with approval workflow and email notifications",
@@ -15,174 +16,48 @@ export const PLATFORM_STATS: PlatformStat[] = [
   { label: "Avg. discovery time", value: "38s", hint: "Down from 3 days" },
 ];
 
-export const MOCK_REPOSITORIES: Repository[] = [
-  {
-    id: "repo-hr-leave",
-    repositoryName: "contoso/hr-leave-service",
-    source: "github",
-    url: "https://github.com/contoso/hr-leave-service",
-    description:
-      "Production leave management service handling accrual, multi-level approval chains, calendar sync and policy configuration for 40k employees.",
-    ownerTeam: "People Platform",
-    ownerContact: "people-platform@contoso.com",
-    accessStatus: "granted",
-    technologyStack: [".NET 8", "ASP.NET Core", "PostgreSQL", "Azure Service Bus", "Redis"],
-    capabilities: ["Approval Workflow", "Notifications", "RBAC", "Audit Log", "Calendar Sync"],
-    matchScore: 94,
-    explanation:
-      "Strong match on approval workflow and notification capabilities. The repository's LeaveApprovalOrchestrator mirrors the multi-level sign-off described in your requirement, and it already ships an email/Teams notification adapter you can reuse without modification.",
-    matchedFiles: [
-      { path: "src/Workflows/LeaveApprovalOrchestrator.cs", reason: "Multi-level approval chain" },
-      { path: "src/Notifications/NotificationDispatcher.cs", reason: "Email + Teams fan-out" },
-      { path: "src/Policies/AccrualPolicyEngine.cs", reason: "Configurable accrual rules" },
-    ],
-    language: "C#",
-    stars: 312,
-    lastUpdated: "2026-08-21",
-  },
-  {
-    id: "repo-workflow-engine",
-    repositoryName: "contoso-enterprise/workflow-engine",
-    source: "azure-devops",
-    url: "https://dev.azure.com/contoso-enterprise/_git/workflow-engine",
-    description:
-      "Generic state-machine workflow engine used by finance, HR and procurement. Supports parallel approvals, delegation, escalation timers and SLA tracking.",
-    ownerTeam: "Enterprise Architecture",
-    ownerContact: "ea-guild@contoso.com",
-    accessStatus: "request-required",
-    technologyStack: ["Java 21", "Spring Boot 3", "Kafka", "MSSQL", "Kubernetes"],
-    capabilities: ["Approval Workflow", "Escalation", "SLA Tracking", "Delegation", "Audit Log"],
-    matchScore: 88,
-    explanation:
-      "Highest-reuse candidate for the workflow portion of your requirement. It is platform-agnostic, already runs in production across three business units, and exposes a REST facade — so you can integrate rather than rebuild the approval domain.",
-    matchedFiles: [
-      { path: "core/src/main/java/StateMachineDefinition.java", reason: "Declarative workflow states" },
-      { path: "core/src/main/java/EscalationScheduler.java", reason: "Timer-based escalation" },
-    ],
-    language: "Java",
-    stars: 156,
-    lastUpdated: "2026-09-01",
-  },
-  {
-    id: "repo-identity",
-    repositoryName: "contoso/identity-gateway",
-    source: "github",
-    url: "https://github.com/contoso/identity-gateway",
-    description:
-      "Central authentication gateway issuing JWTs, refresh tokens and enforcing role/claim based authorization for all internal APIs.",
-    ownerTeam: "Security Engineering",
-    ownerContact: "sec-eng@contoso.com",
-    accessStatus: "granted",
-    technologyStack: [".NET 8", "OpenIddict", "Entra ID", "Redis", "Docker"],
-    capabilities: ["JWT", "RBAC", "SSO", "Token Refresh", "MFA"],
-    matchScore: 81,
-    explanation:
-      "Covers the authentication and authorization slice of your requirement. JwtService and PolicyAuthorizationHandler are drop-in reusable, and onboarding a new client app is a config-only change.",
-    matchedFiles: [
-      { path: "src/Auth/JwtService.cs", reason: "Token issuance and validation" },
-      { path: "src/Auth/PolicyAuthorizationHandler.cs", reason: "Claim-based RBAC" },
-    ],
-    language: "C#",
-    stars: 498,
-    lastUpdated: "2026-08-30",
-  },
-  {
-    id: "repo-notify",
-    repositoryName: "contoso-enterprise/notification-hub",
-    source: "azure-devops",
-    url: "https://dev.azure.com/contoso-enterprise/_git/notification-hub",
-    description:
-      "Multi-channel notification hub — email, SMS, Teams and push — with templating, localisation, retry and delivery receipts.",
-    ownerTeam: "Digital Channels",
-    ownerContact: "digital-channels@contoso.com",
-    accessStatus: "request-required",
-    technologyStack: ["Node.js", "TypeScript", "Azure Functions", "Cosmos DB", "SendGrid"],
-    capabilities: ["Notifications", "Templating", "Localisation", "Retry", "Delivery Receipts"],
-    matchScore: 76,
-    explanation:
-      "Directly satisfies the notification requirement. Rather than building an email layer, publish an event to the hub's topic — templating and localisation are already handled centrally.",
-    matchedFiles: [{ path: "src/templates/TemplateRenderer.ts", reason: "Handlebars template engine" }],
-    language: "TypeScript",
-    stars: 204,
-    lastUpdated: "2026-08-12",
-  },
-  {
-    id: "repo-sf-hr",
-    repositoryName: "Contoso_HR_ServiceCloud",
-    source: "salesforce",
-    url: "https://contoso.my.salesforce.com/lightning/n/Contoso_HR_ServiceCloud",
-    description:
-      "Salesforce Service Cloud package for HR case management, including employee self-service flows, approval processes and Experience Cloud portal.",
-    ownerTeam: "CRM Platform",
-    ownerContact: "crm-platform@contoso.com",
-    accessStatus: "restricted",
-    technologyStack: ["Apex", "Lightning Web Components", "Flow", "Experience Cloud"],
-    capabilities: ["Approval Workflow", "Case Management", "Self-Service Portal", "Notifications"],
-    matchScore: 69,
-    explanation:
-      "Relevant if the solution should live inside the existing HR service desk. Approval Processes and Flows already model the sign-off chain, but the org is restricted and needs CRM Platform sign-off before code review.",
-    matchedFiles: [{ path: "force-app/main/default/flows/Leave_Approval.flow-meta.xml", reason: "Approval flow" }],
-    language: "Apex",
-    lastUpdated: "2026-07-28",
-  },
-  {
-    id: "repo-audit",
-    repositoryName: "contoso/audit-trail-lib",
-    source: "github",
-    url: "https://github.com/contoso/audit-trail-lib",
-    description:
-      "Shared library that captures immutable, tamper-evident audit events for regulated workloads with pluggable sinks.",
-    ownerTeam: "Compliance Engineering",
-    ownerContact: "compliance-eng@contoso.com",
-    accessStatus: "granted",
-    technologyStack: [".NET Standard 2.1", "EF Core", "Azure Blob Storage"],
-    capabilities: ["Audit Log", "Compliance", "Immutable Storage"],
-    matchScore: 62,
-    explanation:
-      "Supporting capability. Any approval-based workflow in a regulated domain needs an audit trail, and this library is the sanctioned implementation — adopting it avoids a compliance review cycle.",
-    language: "C#",
-    stars: 87,
-    lastUpdated: "2026-06-19",
-  },
-  {
-    id: "repo-docs",
-    repositoryName: "contoso-enterprise/document-vault",
-    source: "azure-devops",
-    url: "https://dev.azure.com/contoso-enterprise/_git/document-vault",
-    description:
-      "Secure document upload, virus scanning, OCR extraction and retention-policy enforcement for regulated attachments.",
-    ownerTeam: "Content Services",
-    ownerContact: "content-services@contoso.com",
-    accessStatus: "request-required",
-    technologyStack: ["Python", "FastAPI", "Azure Blob Storage", "ClamAV", "Form Recognizer"],
-    capabilities: ["File Upload", "Virus Scanning", "OCR", "Retention Policy"],
-    matchScore: 58,
-    explanation:
-      "Match on document handling. If your requirement includes supporting evidence or certificate uploads, this service already provides scanning and retention out of the box.",
-    language: "Python",
-    stars: 141,
-    lastUpdated: "2026-08-05",
-  },
-  {
-    id: "repo-portal-ui",
-    repositoryName: "contoso/employee-portal-ui",
-    source: "github",
-    url: "https://github.com/contoso/employee-portal-ui",
-    description:
-      "React design-system implementation of the employee self-service portal, including request forms, approval inbox and status timelines.",
-    ownerTeam: "Employee Experience",
-    ownerContact: "employee-experience@contoso.com",
-    accessStatus: "granted",
-    technologyStack: ["React 19", "TypeScript", "Vite", "TanStack Query", "Playwright"],
-    capabilities: ["Self-Service Portal", "Approval Inbox", "Design System", "Accessibility"],
-    matchScore: 55,
-    explanation:
-      "Front-end reuse candidate. The approval inbox and request-status timeline components map closely to the UI implied by your requirement and follow the corporate design system.",
-    language: "TypeScript",
-    stars: 263,
-    lastUpdated: "2026-09-02",
-  },
-];
+interface RepositoryCatalogEntry {
+  id: number;
+  name: string;
+  platform: string;
+  score: number;
+  isAccessible: boolean;
+  accessLevel: string;
+  url: string;
+  requestAccessEmail?: string;
+  keywords?: string[];
+  matchingComponents?: string[];
+  description?: string;
+  whyThisMatches?: string;
+  matchedFile?: string;
+}
+
+function toSource(platform: string): RepositorySource {
+  const value = platform.toLowerCase();
+  if (value.includes("azure")) return "azure-devops";
+  if (value.includes("salesforce")) return "salesforce";
+  return "github";
+}
+
+function toRepository(entry: RepositoryCatalogEntry): Repository {
+  return {
+    id: String(entry.id),
+    repositoryName: entry.name,
+    source: toSource(entry.platform),
+    url: entry.url,
+    description: entry.description ?? "",
+    ownerTeam: entry.accessLevel,
+    ownerContact: entry.requestAccessEmail,
+    accessStatus: entry.accessLevel.toLowerCase() === "available" ? "granted" : "restricted",
+    technologyStack: entry.keywords ?? [],
+    capabilities: entry.matchingComponents ?? [],
+    matchScore: entry.score,
+    explanation: entry.whyThisMatches ?? "",
+    matchedFiles: entry.matchedFile ? [{ path: entry.matchedFile }] : [],
+  };
+}
+
+export const MOCK_REPOSITORIES: Repository[] = (repositoryCatalog as RepositoryCatalogEntry[]).map(toRepository);
 
 export const MOCK_COMPONENTS: ReusableComponent[] = [
   {

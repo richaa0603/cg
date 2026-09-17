@@ -1,0 +1,108 @@
+[
+  {
+    "id": 1,
+    "name": "employee-authentication-service",
+    "platform": "GitHub",
+    "score": 98,
+    "isAccessible": true,
+    "accessLevel": "Available",
+    "url": "https://github.com/Gitlas-poc/employee-authentication-service",
+    "requestAccessEmail": "repo-access@gitlas.com",
+    "keywords": ["Authentication", "Azure AD", "OAuth", "OIDC"],
+    "matchingComponents": [
+      "User Sign In",
+      "Authorization",
+      "Role Management",
+      "Microsoft Graph",
+      "Multi Tenant Support"
+    ],
+    "description": "Enterprise authentication service built on Microsoft Entra ID.",
+    "whyThisMatches": "Best match for onboarding security and identity management.",
+    "matchedFile": "1-WebApp-OIDC/README.md"
+  },
+  {
+    "id": 2,
+    "name": "OrangeHRM",
+    "platform": "Azure DevOps",
+    "score": 96,
+    "isAccessible": true,
+    "accessLevel": "Restricted",
+    "url": "https://dev.azure.com/Gitlas-poc/Gitlas/_git/OrangeHRM",
+    "requestAccessEmail": "repo-access@gitlas.com",
+    "keywords": ["HR", "Recruitment", "Attendance"],
+    "matchingComponents": [
+      "Employee Directory",
+      "Leave Management",
+      "Attendance",
+      "Recruitment",
+      "Reporting"
+    ],
+    "description": "Human resource management platform.",
+    "whyThisMatches": "Strong business capability coverage."
+  },
+  {
+    "id": 3,
+    "name": "SuiteCRM",
+    "platform": "Azure DevOps",
+    "score": 84,
+    "isAccessible": false,
+    "accessLevel": "Restricted",
+    "url": "https://dev.azure.com/Gitlas-poc/Gitlas/_git/SuiteCRM",
+    "requestAccessEmail": "repo-access@gitlas.com",
+    "keywords": ["Workflow", "CRM", "Notifications"],
+    "matchingComponents": [
+      "Workflow Engine",
+      "Reports",
+      "Notifications"
+    ],
+    "description": "Workflow and process management platform.",
+    "whyThisMatches": "Useful for approval chains and notifications."
+  },
+  {
+    "id": 4,
+    "name": "react-redux-realworld-example-app",
+    "platform": "GitHub",
+    "score": 79,
+    "isAccessible": true,
+    "accessLevel": "Available",
+    "url": "https://github.com/Gitlas-poc/react-redux-realworld-example-app",
+    "requestAccessEmail": "repo-access@gitlas.com",
+    "keywords": ["React", "JWT", "Authentication"],
+    "matchingComponents": [
+      "Login",
+      "Registration",
+      "JWT Auth",
+      "User Profiles"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "eShopOnWeb",
+    "platform": "GitHub",
+    "score": 35,
+    "isAccessible": true,
+    "accessLevel": "Available",
+    "url": "https://github.com/Gitlas-poc/eShopOnWeb",
+    "requestAccessEmail": "repo-access@gitlas.com",
+    "keywords": ["Architecture", ".NET"],
+    "matchingComponents": [
+      "Application Architecture",
+      "Catalog"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "eShop",
+    "platform": "GitHub",
+    "score": 30,
+    "isAccessible": false,
+    "accessLevel": "Restricted",
+    "url": "https://github.com/Gitlas-poc/eShop",
+    "requestAccessEmail": "repo-access@gitlas.com",
+    "keywords": ["Microservices", "Aspire"],
+    "matchingComponents": [
+      "Microservices",
+      "API Services"
+    ]
+  }
+]

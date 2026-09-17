@@ -1,4 +1,4 @@
-const { STORAGE_KEYS, ROUTES, DEFAULT_BASE_URL } = globalThis.Gitlas;
+const { STORAGE_KEYS, ROUTES, BUNDLED_APP_PATH, DEFAULT_BASE_URL } = globalThis.Gitlas;
 
 const EXAMPLES = [
   "Need JWT Authentication with RBAC",
@@ -34,7 +34,17 @@ const sheetStatus = document.getElementById("sheet-status");
 
 const CLOCK_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>`;
 
-/** Runs a search: remembers it, then opens the Gitlas results route. */
+function openBundledResults(query) {
+  const appRoot = chrome.runtime.getURL(BUNDLED_APP_PATH);
+  window.location.assign(
+    globalThis.Gitlas.buildUrl(appRoot, ROUTES.discover, {
+      q: query,
+      panel: "1",
+    }),
+  );
+}
+
+/** Uses the GitHub drawer when available, otherwise stays inside this popup. */
 async function search(rawQuery) {
   const query = String(rawQuery ?? "").trim();
   if (!query) {
@@ -49,11 +59,24 @@ async function search(rawQuery) {
       await chrome.storage.sync.set({ [STORAGE_KEYS.requirement]: query, updatedAt: Date.now() });
     }
 
-    await globalThis.Gitlas.openGitlas(ROUTES.search, { q: query });
-    window.close();
+    const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (activeTab?.id && activeTab.url?.startsWith("https://github.com/")) {
+      try {
+        await chrome.tabs.sendMessage(activeTab.id, {
+          type: "GITLAS_OPEN_SEARCH",
+          payload: { requirement: query },
+        });
+        window.close();
+        return;
+      } catch (error) {
+        console.warn("Gitlas: drawer unavailable, using popup results", error);
+      }
+    }
+
+    openBundledResults(query);
   } catch (error) {
     console.error("Gitlas: search failed", error);
-    openSettings("Could not open Gitlas. Check the app URL.", true);
+    openSettings(error instanceof Error ? error.message : "Could not open Gitlas", true);
   }
 }
 

@@ -2,6 +2,9 @@ import { MOCK_COMPONENTS, MOCK_REPOSITORIES } from "../data/mockData";
 import type { Repository, ReusableComponent, RepositorySource } from "../types/gitlas";
 
 const API_BASE = (import.meta.env.VITE_AI_API_BASE as string | undefined) ?? "http://localhost:8000";
+const SEARCH_API_URL =
+  (import.meta.env.VITE_SEARCH_API_URL as string | undefined) ?? `${API_BASE.replace(/\/$/, "")}/search`;
+const ACCESS_REQUEST_API_URL = import.meta.env.VITE_ACCESS_REQUEST_API_URL as string | undefined;
 
 /** Backends may emit a variety of spellings for the same platform. */
 function normaliseSource(raw: unknown): RepositorySource {
@@ -108,17 +111,25 @@ export async function searchRepositories(query: string, options: SearchOptions =
 
   let results: Repository[];
   try {
-    const res = await fetch(`${API_BASE}/search`, {
+    const res = await fetch(SEARCH_API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: trimmed }),
+      body: JSON.stringify({ query: trimmed, requirement: trimmed }),
       signal: options.signal,
     });
     if (!res.ok) throw new Error(`Search API error ${res.status}`);
 
-    const data = (await res.json()) as { results?: Record<string, unknown>[] };
-    const list = Array.isArray(data.results) ? data.results : [];
-    results = list.length > 0 ? list.map(normaliseRepository) : scoreMockRepositories(trimmed);
+    const data = (await res.json()) as
+      | Record<string, unknown>[]
+      | { results?: Record<string, unknown>[]; projects?: Record<string, unknown>[] };
+    const list = Array.isArray(data)
+      ? data
+      : Array.isArray(data.results)
+        ? data.results
+        : Array.isArray(data.projects)
+          ? data.projects
+          : [];
+    results = list.map(normaliseRepository);
   } catch (err) {
     if ((err as Error)?.name === "AbortError") throw err;
     // Demo resilience: never leave the UI empty because the index is offline.
@@ -167,6 +178,20 @@ export interface AccessRequestPayload {
 }
 
 export async function submitAccessRequest(payload: AccessRequestPayload): Promise<{ ticketId: string }> {
+  if (ACCESS_REQUEST_API_URL) {
+    const response = await fetch(ACCESS_REQUEST_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) throw new Error(`Access request API error ${response.status}`);
+
+    const data = (await response.json()) as { ticketId?: string; id?: string };
+    const ticketId = data.ticketId ?? data.id;
+    if (!ticketId) throw new Error("Access request API did not return a ticket ID");
+    return { ticketId };
+  }
+
   await new Promise((resolve) => setTimeout(resolve, 900));
   const suffix = Math.floor(1000 + Math.random() * 9000);
   void payload;
