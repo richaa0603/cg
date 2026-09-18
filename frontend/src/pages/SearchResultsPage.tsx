@@ -66,7 +66,7 @@ export function SearchResultsPage() {
         />
       )}
 
-      {status === "loading" && <LoadingGrid />}
+      {status === "loading" && <LoadingGrid layout="cards" />}
 
       {status === "error" && (
         <EmptyState

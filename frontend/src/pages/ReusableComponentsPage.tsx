@@ -12,7 +12,7 @@ export function ReusableComponentsPage() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("All");
 
-  const fetcher = useCallback(() => getReusableComponents(query), [query]);
+  const fetcher = useCallback((signal: AbortSignal) => getReusableComponents(query, { signal }), [query]);
   const { status, data } = useAsync<ReusableComponent[]>(fetcher, query);
 
   const categories = useMemo(() => {
@@ -43,7 +43,7 @@ export function ReusableComponentsPage() {
       />
 
       {status === "loading" ? (
-        <LoadingGrid count={3} label="Extracting components…" />
+        <LoadingGrid count={3} layout="cards" label="Extracting reusable components across indexed repositories…" showPlatforms={false} />
       ) : (
         <>
           <div className="g-row g-row--wrap" style={{ gap: 8 }}>

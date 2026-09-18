@@ -38,12 +38,15 @@ const VALUE_PROPS = [
 export function HomePage() {
   const routeQuery = new URLSearchParams(window.location.hash.split("?")[1] ?? "").get("q") ?? "";
   const [query, setQuery] = useState(routeQuery);
+  const [searchSeq, setSearchSeq] = useState(0);
   const { record } = useSearchHistory();
   const fetcher = useCallback((signal: AbortSignal) => searchRepositories(query, { signal }), [query]);
-  const { status, data, error } = useAsync<Repository[]>(fetcher, query, query.length > 0);
+  const asyncKey = `${query}::${searchSeq}`;
+  const { status, data, error } = useAsync<Repository[]>(fetcher, asyncKey, query.length > 0);
 
-  const runSearch = (query: string) => {
-    setQuery(query.trim());
+  const runSearch = (nextQuery: string) => {
+    setQuery(nextQuery.trim());
+    setSearchSeq((s) => s + 1);
   };
 
   useEffect(() => {

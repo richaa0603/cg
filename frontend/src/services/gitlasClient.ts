@@ -100,6 +100,27 @@ function scoreMockRepositories(query: string): Repository[] {
     .sort((a, b) => b.matchScore - a.matchScore);
 }
 
+function delayWithSignal(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      return reject(new DOMException("Aborted", "AbortError"));
+    }
+    const timer = setTimeout(() => {
+      cleanup();
+      resolve();
+    }, ms);
+    const onAbort = () => {
+      cleanup();
+      reject(new DOMException("Aborted", "AbortError"));
+    };
+    const cleanup = () => {
+      clearTimeout(timer);
+      signal?.removeEventListener("abort", onAbort);
+    };
+    signal?.addEventListener("abort", onAbort);
+  });
+}
+
 export interface SearchOptions {
   sources?: RepositorySource[];
   signal?: AbortSignal;
@@ -108,6 +129,9 @@ export interface SearchOptions {
 export async function searchRepositories(query: string, options: SearchOptions = {}): Promise<Repository[]> {
   const trimmed = query.trim();
   if (!trimmed) return [];
+
+  const startTime = Date.now();
+  const MIN_RESPONSE_TIME_MS = 800;
 
   let results: Repository[];
   try {
@@ -136,6 +160,11 @@ export async function searchRepositories(query: string, options: SearchOptions =
     results = scoreMockRepositories(trimmed);
   }
 
+  const elapsed = Date.now() - startTime;
+  if (elapsed < MIN_RESPONSE_TIME_MS) {
+    await delayWithSignal(MIN_RESPONSE_TIME_MS - elapsed, options.signal);
+  }
+
   if (options.sources && options.sources.length > 0) {
     const allowed = new Set(options.sources);
     results = results.filter((r) => allowed.has(r.source));
@@ -143,27 +172,38 @@ export async function searchRepositories(query: string, options: SearchOptions =
   return results;
 }
 
-export async function getRepositoryById(id: string): Promise<Repository | null> {
+export async function getRepositoryById(id: string, signal?: AbortSignal): Promise<Repository | null> {
   const decoded = decodeURIComponent(id);
   const match =
     MOCK_REPOSITORIES.find((r) => r.id === decoded) ??
     MOCK_REPOSITORIES.find((r) => r.repositoryName === decoded) ??
     null;
-  return Promise.resolve(match);
+  await delayWithSignal(250, signal);
+  return match;
 }
 
-export async function getReusableComponents(query = ""): Promise<ReusableComponent[]> {
+export async function getReusableComponents(query = "", options: { signal?: AbortSignal } = {}): Promise<ReusableComponent[]> {
+  const startTime = Date.now();
+  const MIN_DELAY_MS = 500;
   const tokens = tokenize(query);
+  let list: ReusableComponent[];
   if (tokens.length === 0) {
-    return [...MOCK_COMPONENTS].sort((a, b) => b.confidence - a.confidence);
+    list = [...MOCK_COMPONENTS].sort((a, b) => b.confidence - a.confidence);
+  } else {
+    list = MOCK_COMPONENTS.map((c) => {
+      const haystack = `${c.name} ${c.category} ${c.description} ${c.repositoryName}`.toLowerCase();
+      const hits = tokens.filter((t) => haystack.includes(t)).length;
+      return { component: c, hits };
+    })
+      .sort((a, b) => b.hits - a.hits || b.component.confidence - a.component.confidence)
+      .map((x) => x.component);
   }
-  return MOCK_COMPONENTS.map((c) => {
-    const haystack = `${c.name} ${c.category} ${c.description} ${c.repositoryName}`.toLowerCase();
-    const hits = tokens.filter((t) => haystack.includes(t)).length;
-    return { component: c, hits };
-  })
-    .sort((a, b) => b.hits - a.hits || b.component.confidence - a.component.confidence)
-    .map((x) => x.component);
+
+  const elapsed = Date.now() - startTime;
+  if (elapsed < MIN_DELAY_MS) {
+    await delayWithSignal(MIN_DELAY_MS - elapsed, options.signal);
+  }
+  return list;
 }
 
 export async function getComponentsForRepository(repositoryId: string): Promise<ReusableComponent[]> {

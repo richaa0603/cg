@@ -50,7 +50,11 @@ export function SearchBar({
 
   return (
     <div ref={wrapRef} style={{ position: "relative" }}>
-      <form className={`g-search${size === "lg" ? " g-search--lg" : ""}`} onSubmit={submit} role="search">
+      <form
+        className={`g-search${size === "lg" ? " g-search--lg" : ""}${busy ? " is-busy" : ""}`}
+        onSubmit={submit}
+        role="search"
+      >
         <Search size={18} className="g-faint" aria-hidden="true" />
         <input
           className="g-search__input"
@@ -59,9 +63,9 @@ export function SearchBar({
           placeholder={placeholder}
           aria-label="Search enterprise capabilities"
           onChange={(e) => setValue(e.target.value)}
-          onFocus={() => setHistoryOpen(history.length > 0)}
+          onFocus={() => !busy && setHistoryOpen(history.length > 0)}
         />
-        {value && (
+        {value && !busy && (
           <button
             type="button"
             className="g-btn g-btn--ghost g-btn--sm"

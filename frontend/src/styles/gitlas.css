@@ -1053,6 +1053,54 @@ body:has(.g-shell--panel) #root {
   }
 }
 
+.g-loading-banner {
+  padding: 11px 16px;
+  background: linear-gradient(140deg, rgba(109, 94, 252, 0.08), rgba(34, 211, 238, 0.05));
+  border: 1px solid rgba(109, 94, 252, 0.25);
+  border-radius: var(--g-radius);
+}
+
+.g-loading-status {
+  font-size: 13px;
+  color: #d1dcfa;
+  font-weight: 500;
+  transition: opacity var(--g-fast);
+}
+
+.g-badge--loading {
+  font-size: 11px;
+  padding: 3px 9px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--g-border);
+  color: var(--g-text-muted);
+}
+
+.g-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--src-color, var(--g-brand-2));
+  box-shadow: 0 0 7px var(--src-color, var(--g-brand-2));
+  animation: g-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes g-pulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.g-search.is-busy {
+  border-color: rgba(109, 94, 252, 0.5);
+  box-shadow: 0 0 16px rgba(109, 94, 252, 0.18);
+}
+
+
 /* --- Misc ----------------------------------------------------------------- */
 
 .g-divider {
